@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reproduce the Gate Log (AIG-DEC-04) workbook checks for scenarios G1 to G9 and H2.
+"""Reproduce the Gate Log (AIG-DEC-04) workbook checks for scenarios G1 to G9 and H2 (and F4b to F4d in the Register, if it is in the same folder).
 
 Usage: python3 scripts/check-gate-log.py <AIG-DEC-04_Gate_Log_Proposed.xlsx> [path/to/recalc.py]
 
@@ -63,8 +63,35 @@ out = []
 for sheet, col, rows in (("Gate plan", "M", plan), ("Gate events", "N", events), ("Conditions", "J", conds)):
     for r, (sid, _) in rows.items():
         out.append({"scenario": sid, "sheet": sheet, "row": r, "message": v[sheet][f"{col}{r}"].value})
+
+# Register (AIG-INV-04) Evidence index, if it sits next to the Gate Log: the 12-month test for
+# screening by reference (Playbook §4.6; scenarios F4b to F4d). Dates are relative to today.
+reg_src = os.path.join(os.path.dirname(os.path.abspath(src)), "AIG-INV-04_AI_Register_Proposed.xlsx")
+registers = []
+if os.path.exists(reg_src):
+    rtmp = os.path.join(os.path.dirname(tmp), "register-test.xlsx")
+    shutil.copy(reg_src, rtmp)
+    rwb = openpyxl.load_workbook(rtmp)
+    rwb["AI Register"]["A4"] = "AIR-T001"
+    today = datetime.datetime.combine(datetime.date.today(), datetime.time())
+    days = lambda n: today + datetime.timedelta(days=n)
+    ev = {
+        4: ("F4b", dict(M=days(-500), N=days(200))),
+        5: ("F4c", dict(M=days(-200), N=days(-10))),
+        6: ("F4d", dict(M=days(-500), N=days(200), O="SH-0001 owner review")),
+        7: ("F4d", dict(M=days(-60), N=days(300))),
+    }
+    E2 = rwb["Evidence index"]
+    for r, (_, vals) in ev.items():
+        put(E2, r, **{**dict(A=f"EV-T{r}", B="AIR-T001", C="DPIA", G="Accepted", H="link"), **vals})
+    rwb.save(rtmp)
+    subprocess.run([sys.executable, os.path.basename(recalc), rtmp], cwd=os.path.dirname(recalc), check=True, capture_output=True)
+    rv = openpyxl.load_workbook(rtmp, data_only=True)["Evidence index"]
+    for r, (sid, _) in ev.items():
+        out.append({"scenario": sid, "sheet": "Evidence index", "row": r, "message": rv[f"L{r}"].value})
+    registers.append(os.path.basename(reg_src) + " " + openpyxl.load_workbook(reg_src)["Document Control"]["B7"].value)
 version = openpyxl.load_workbook(src)["Document Control"]["B7"].value
-res = {"workbook": os.path.basename(src), "version": version, "date": datetime.date.today().isoformat(), "results": out}
+res = {"workbook": os.path.basename(src), "version": version, "also": registers, "date": datetime.date.today().isoformat(), "results": out}
 here = os.path.join(os.path.dirname(__file__), "..", "results")
 json.dump(res, open(os.path.join(here, "workbook-results.json"), "w"), indent=1, ensure_ascii=False)
 open(os.path.join(here, "workbook-results.js"), "w").write("window.QA_WORKBOOK = " + json.dumps(res, ensure_ascii=False) + ";\n")

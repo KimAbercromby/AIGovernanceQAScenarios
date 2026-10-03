@@ -15,8 +15,8 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
 
-  const SUITE = "v3.9.7 (3 October 2026)";
-  const NO_INVEST = "No — existing approved system and licence, no new cost";
+  const SUITE = "v3.9.8 (3 October 2026)";
+  const NO_INVEST = "No — no new funding, licences, charges, procurement, contract or licence change";
 
   // A new use of Microsoft 365 Copilot, already on the Register (fictional AIR-SIM1).
   const BASE = {
@@ -28,7 +28,7 @@
     source: "Embedded in platform / supplier feature", capability: "Generative AI",
     actionAuthority: "None — outputs only", systemsAccessed: "Team meeting notes the user can open",
     lifecycle: "Idea", dataType: "Personal data", procurementRoute: "Existing contract or licence",
-    newInvestment: NO_INVEST, systemApproval: "Yes — Approved and Active, review not overdue", affectsIndividuals: "No", publicFacing: "No", dateFirstUsed: "",
+    newInvestment: NO_INVEST, systemApproval: "Yes — Approved (or Approved with conditions) and Active, review not overdue", affectsIndividuals: "No", publicFacing: "No", dateFirstUsed: "",
   };
   const AGPI_LOW = { resident: 1, trust: 2, legal: 2, visibility: 2, strategic: 1, oversight: 1 }; // 13.75, Priority 5
   const AGPI_P4 = { resident: 3, trust: 2, legal: 2, visibility: 2, strategic: 3, oversight: 2 };  // 33.75, Priority 4
@@ -43,16 +43,16 @@
 
   const R = {
     g13: "AIG-DEC-01 v1.12 Gate 1 and 3 rule",
-    g2: "AIG-DEC-01 v1.11 Gate 2 (mandatory for High, Critical and action-capable uses)",
-    g4: "AIG-DEC-01 v1.11 Gate 4 rule",
-    g5: "AIG-DEC-01 v1.11 Gate 5 (from Medium)",
-    lt: "Playbook §3.8.2.1 and Appendix F.6; AIG-INV-02 v1.8",
+    g2: "AIG-DEC-01 v1.12 Gate 2 (mandatory for High, Critical and action-capable uses)",
+    g4: "AIG-DEC-01 v1.12 Gate 4 rule",
+    g5: "AIG-DEC-01 v1.12 Gate 5 (from Medium)",
+    lt: "Playbook §3.8.2.1 and Appendix F.6; AIG-INV-02 v1.9",
     found: "Playbook §3.8; AIG-INV-02 (found in use is never Fast Track)",
     change: "AIG-DEC-01 Gate 7 (re-entry on the same AIR-ID)",
     tier: "Playbook §3.10.1, §4.4.4, §4.4.6; AIG-ASS-02",
     agentic: "Playbook §4.4.6 agentic trigger; AIG-DEC-01 rules R1 to R3",
     screen: "Playbook §4.6 screening by reference; AIG-INV-02 Part C",
-    gl: "AIG-DEC-04 v1.2 row checks",
+    gl: "AIG-DEC-04 v1.3 row checks",
   };
 
   const GROUPS = {
@@ -211,7 +211,10 @@
       steps: ["Complete AIG-ASS-06, AIG-ASS-07 and AIG-ASS-05 screening."], expected: "Short screenings completed; later uses can cite them.", ref: [R.screen], status: "verified", evidence: "Simulation pack UC-SIM-02 (first run), 3 October 2026" },
     { id: "F4", g: "F", kind: "procedure", t: "Assessment out of date, still a draft, or not in the evidence index",
       steps: ["Check the AIG-INV-04 evidence index: status Accepted, with version and owner.", "Check it was completed or last reviewed within 12 months and its review date has not passed."], expected: "If not, it cannot be cited until its owner records a 'still holds' review, or a fresh screening is done.", ref: [R.screen],
-      decided: "3 October 2026: completed or reviewed within the last 12 months, with its own review date not passed; an older one needs a recorded 'still holds' review by its owner (Playbook §4.6)." },
+      decided: "3 October 2026: completed or reviewed within the last 12 months, with its own review date not passed; an older one needs a recorded 'still holds' review by its owner (Playbook §4.6). The Register evidence index now records the dates and flags both cases (AIG-INV-04 v1.1)." },
+    { id: "F4b", g: "F", kind: "workbook", t: "Register: Accepted assessment over 12 months old, no 'still holds' review", sheet: "Evidence index", message: "Over 12 months old: owner's still-holds review needed before citing by reference", ref: ["AIG-INV-04 v1.1 Evidence index", R.screen] },
+    { id: "F4c", g: "F", kind: "workbook", t: "Register: assessment whose own review date has passed", sheet: "Evidence index", message: "Review date passed: re-review before citing by reference (Playbook §4.6)", ref: ["AIG-INV-04 v1.1 Evidence index", R.screen] },
+    { id: "F4d", g: "F", kind: "workbook", t: "Register: older assessment with its owner's 'still holds' review recorded, or a recent one", sheet: "Evidence index", message: "Check against source", ref: ["AIG-INV-04 v1.1 Evidence index", R.screen] },
     { id: "F5", g: "F", kind: "procedure", t: "Model or settings changed since the assessment",
       steps: ["Compare the system's change log with the assessment date."], expected: "Cannot cite until the assessment is updated.", ref: [R.screen] },
     { id: "F6", g: "F", kind: "procedure", t: "Equality covered, human rights engagement uncertain",
