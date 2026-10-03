@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Governance QA Scenarios</title>
+<meta name="description" content="Scenario test suite for the proposed AI governance suite: runs the real triage engine against rules written from the suite, with workbook checks, human controls and mutation testing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a test report. Verdict strip first, then how the QA works, then the evidence (scenarios, workbook, mutations, open decisions). */
+:root{
+  --bg:#f5f6f8; --panel:#ffffff; --ink:#142030; --muted:#566373; --line:#dbe0e7; --accent:#1f4e9a; --accent-soft:#e8eef8;
+  --pass:#22663e; --pass-bg:#e4f3e9; --fail:#9b2c1c; --fail-bg:#fbe8e4; --man:#6b4f08; --man-bg:#faf0d4; --flag:#9a3412; --flag-bg:#fff0e5;
+  --display:"Source Serif 4", Georgia, serif; --body:"Source Sans 3", "Segoe UI", system-ui, sans-serif; --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e141b; --panel:#151f29; --ink:#e5ebf1; --muted:#9ba8b6; --line:#283543; --accent:#90b5f0; --accent-soft:#1b2b42;
+  --pass:#8fd6a7; --pass-bg:#15301f; --fail:#f3a491; --fail-bg:#3a1e18; --man:#efcd78; --man-bg:#33290f; --flag:#f5b585; --flag-bg:#3a2414; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e141b; --panel:#151f29; --ink:#e5ebf1; --muted:#9ba8b6; --line:#283543; --accent:#90b5f0; --accent-soft:#1b2b42;
+  --pass:#8fd6a7; --pass-bg:#15301f; --fail:#f3a491; --fail-bg:#3a1e18; --man:#efcd78; --man-bg:#33290f; --flag:#f5b585; --flag-bg:#3a2414; color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:28px 56px}
+.wrap{max-width:1160px;margin:0 auto;display:grid;gap:26px}
+a{color:var(--accent)}
+h1,h2{font-family:var(--display);text-wrap:balance;margin:0}
+h1{font-size:clamp(28px,4.4vw,40px);line-height:1.12}
+h2{font-size:23px}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent)}
+.lede{margin:10px 0 0;color:var(--muted);max-width:74ch}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;min-width:0}
+.tile b{display:block;font-family:var(--display);font-size:26px;font-variant-numeric:tabular-nums;line-height:1.2}
+.tile span{font-size:13px;color:var(--muted)}
+.tile.pass b{color:var(--pass)} .tile.fail b{color:var(--fail)} .tile.flag b{color:var(--flag)}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.how div{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px;min-width:0}
+.how h3{margin:0 0 4px;font-size:15.5px}
+.how p{margin:0;font-size:14px;color:var(--muted)}
+.meta{font-family:var(--mono);font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding-block:8px;z-index:3;border-bottom:1px solid var(--line)}
+.bar button,.btn{font:600 13px var(--body);border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer}
+.bar button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+.bar input{font:14px var(--body);border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:6px;padding:6px 10px;flex:1 1 180px;min-width:0}
+button:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.group{display:grid;gap:10px}
+.group>h2{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.group>h2 small{font:400 14px var(--body);color:var(--muted)}
+.gwhy{margin:-4px 0 2px;color:var(--muted);font-size:14px}
+.sc{background:var(--panel);border:1px solid var(--line);border-radius:8px;display:grid;grid-template-columns:5px minmax(0,1fr)}
+.sc .rail{border-radius:8px 0 0 8px;background:var(--line)}
+.sc.pass .rail{background:var(--pass)} .sc.fail .rail{background:var(--fail)} .sc.manual .rail{background:var(--man)}
+.sc>div:last-child{padding:12px 16px;display:grid;gap:8px;min-width:0}
+.top{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.top .id{font-family:var(--mono);font-weight:500;color:var(--accent);min-width:44px}
+.top h3{margin:0;font-size:15.5px;flex:1 1 300px;min-width:0}
+.pill{font:600 12px var(--body);border-radius:999px;padding:2px 9px;white-space:nowrap}
+.pill.pass{background:var(--pass-bg);color:var(--pass)} .pill.fail{background:var(--fail-bg);color:var(--fail)} .pill.manual{background:var(--man-bg);color:var(--man)} .pill.flag{background:var(--flag-bg);color:var(--flag)}
+.why{margin:0;font-size:14px;color:var(--muted)}
+.checks{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600}
+td.mono{font-family:var(--mono);font-size:12.5px}
+td.ok{color:var(--pass);font-weight:600} td.bad{color:var(--fail);font-weight:600}
+.refs{display:flex;flex-wrap:wrap;gap:6px}
+.ref{font-size:12px;border:1px solid var(--line);border-radius:4px;padding:1px 7px;color:var(--muted)}
+.decide{font-size:13.5px;background:var(--flag-bg);border-radius:6px;padding:8px 10px}
+.decide b{color:var(--flag)}
+ol.steps{margin:0;padding-left:20px;font-size:14px}
+details summary{cursor:pointer;font-size:13px;color:var(--accent)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px;display:grid;gap:10px;min-width:0}
+.note{font-size:13px;color:var(--muted);margin:0}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+.err{background:var(--fail-bg);color:var(--fail);border-radius:6px;padding:10px 12px}
+@media (prefers-reduced-motion:no-preference){.sc{transition:box-shadow .15s}.sc:hover{box-shadow:0 1px 0 var(--line)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">Proposed AI governance suite · QA scenario suite</div>
+    <h1>AI Governance QA Scenarios</h1>
+    <p class="lede">Every variation of system, use, money, risk, agency, Fast Track and screening that the suite has to handle. Expected results are written from the suite's own rules, with the clause cited, and the real triage engine is run against them in your browser. Where a rule depends on a person or a workbook formula rather than code, the test says so and shows the evidence.</p>
+    <p class="meta" id="engineMeta">Loading the triage engine…</p>
+  </header>
+
+  <div class="strip" id="strip" aria-live="polite"></div>
+
+  <section class="how" aria-label="How the QA works">
+    <div><h3>1 · Rules first</h3><p>Each scenario's expected result comes from a cited clause (Gate Map, Playbook, Fast-Track form), never from the engine's own output. A failure means the engine and the rule disagree.</p></div>
+    <div><h3>2 · Three kinds of test</h3><p><b>Engine</b> scenarios run live against the triage engine. <b>Workbook</b> scenarios recalculate the Gate Log's row-check formulas. <b>Human control</b> scenarios list the steps a person must take.</p></div>
+    <div><h3>3 · Tests that bite</h3><p>Mutation testing puts realistic bugs back into a copy of the engine, including the one found in the Copilot simulation, and confirms at least one scenario fails each time.</p></div>
+    <div><h3>4 · Decisions surfaced</h3><p>Where the rules give an answer that may not be wanted, or leave a gap, the scenario is flagged for a policy decision rather than quietly passed.</p></div>
+  </section>
+
+  <div class="bar" role="toolbar" aria-label="Filter scenarios">
+    <button type="button" id="f-all" data-f="all" aria-pressed="true">All</button>
+    <button type="button" id="f-engine" data-f="engine" aria-pressed="false">Engine</button>
+    <button type="button" id="f-workbook" data-f="workbook" aria-pressed="false">Workbook</button>
+    <button type="button" id="f-procedure" data-f="procedure" aria-pressed="false">Human control</button>
+    <button type="button" id="f-fail" data-f="fail" aria-pressed="false">Failing</button>
+    <button type="button" id="f-decide" data-f="decide" aria-pressed="false">Decision needed</button>
+    <input id="q" type="search" placeholder="Search, e.g. Copilot, Unsure, DPIA" aria-label="Search scenarios">
+    <button type="button" class="btn" id="rerun">Run again</button>
+  </div>
+
+  <main id="list" class="wrap" style="gap:28px"></main>
+
+  <section class="panel" aria-labelledby="mut-h">
+    <h2 id="mut-h">Mutation testing</h2>
+    <p class="note">Each row puts one realistic bug into an in-memory copy of the engine and re-runs every engine scenario. "Caught" means at least one scenario failed. Reproduce with <code>node scripts/mutation-check.js</code>.</p>
+    <div class="checks"><table id="mutTable"><thead><tr><th>ID</th><th>Bug introduced</th><th>Result</th><th>Caught by</th></tr></thead><tbody></tbody></table></div>
+  </section>
+
+  <section class="panel" aria-labelledby="wb-h">
+    <h2 id="wb-h">Gate Log workbook run</h2>
+    <p class="note" id="wbMeta"></p>
+  </section>
+
+  <footer>
+    Proposed design draft, not approved Council policy. All records are fictional. Engine: <span id="engineFoot"></span>. Run the same checks from a terminal with <code>npm test</code>. Source and method: <a href="https://github.com/KimAbercromby/AIGovernanceQAScenarios">GitHub repository</a>.
+  </footer>
+</div>
+
+<script src="scenarios.js"></script>
+<script src="runner.js"></script>
+<script src="results/workbook-results.js"></script>
+<script src="results/mutation-results.js"></script>
+<script>
+(function(){
+  "use strict";
+  const LIVE = "https://kimabercromby.github.io/AIGovernanceTriage-MultiBoard/src/triage-logic.js";
+  const useLive = location.hash === "#live";
+  const $ = (s) => document.querySelector(s);
+  const esc = (v) => String(v == null ? "" : v).replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+  let filter = "all", q = "", outcomes = {};
+
+  function load(src){ return new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = () => no(new Error("Could not load " + src)); document.head.appendChild(s); }); }
+
+  const ROUTE_NAMES = { light: "Light-touch", standard: "Standard", agentic: "Agentic", retrospective: "Retrospective intake", "re-entry": "Re-entry" };
+  const GATE_WORD = { R: "Req", N: "N/A", C: "Cond" };
+  function pretty(label, v){
+    if (label === "Gates 1 to 6" && /^[RNC?]{6}$/.test(v)) return [...v].map((c, i) => `G${i + 1} ${GATE_WORD[c] || c}`).join(" · ");
+    if (label === "Route") return ROUTE_NAMES[v] || v;
+    return v;
+  }
+  function wbFor(id){ const w = window.QA_WORKBOOK; return w ? w.results.filter((r) => r.scenario === id) : []; }
+
+  function runAll(){
+    outcomes = {};
+    const L = window.TriageLogic;
+    for (const s of QA.SCENARIOS) {
+      if (s.kind === "engine") { const r = QARunner.run(L, QA, s); outcomes[s.id] = { status: r.pass ? "pass" : "fail", r }; }
+      else if (s.kind === "workbook") {
+        const rows = wbFor(s.id);
+        const ok = rows.length && rows.every((x) => x.message === s.message);
+        outcomes[s.id] = { status: rows.length ? (ok ? "pass" : "fail") : "manual", rows };
+      } else outcomes[s.id] = { status: "manual" };
+    }
+    strip(); render();
+  }
+
+  function strip(){
+    const all = QA.SCENARIOS, by = (k) => all.filter((s) => s.kind === k);
+    const eng = by("engine"), engPass = eng.filter((s) => outcomes[s.id].status === "pass").length;
+    const wb = by("workbook"), wbPass = wb.filter((s) => outcomes[s.id].status === "pass").length;
+    const pr = by("procedure"), prVer = pr.filter((s) => s.status === "verified").length;
+    const m = window.QA_MUTATIONS ? window.QA_MUTATIONS.results : [], mCaught = m.filter((x) => x.caught).length;
+    const dec = all.filter((s) => s.decide).length;
+    const fails = eng.length - engPass + wb.length - wbPass;
+    $("#strip").innerHTML = [
+      [`${engPass} / ${eng.length}`, "engine scenarios pass", engPass === eng.length ? "pass" : "fail"],
+      [`${wbPass} / ${wb.length}`, "Gate Log checks confirmed", wbPass === wb.length ? "pass" : "fail"],
+      [`${mCaught} / ${m.length}`, "planted bugs caught", mCaught === m.length ? "pass" : "fail"],
+      [`${pr.length}`, `human controls (${prVer} evidenced)`, ""],
+      [`${dec}`, "need a policy decision", "flag"],
+      [`${fails}`, "failures", fails ? "fail" : "pass"],
+    ].map(([b, s, c]) => `<div class="tile ${c}"><b>${b}</b><span>${s}</span></div>`).join("");
+  }
+
+  function card(s){
+    const o = outcomes[s.id] || { status: "manual" };
+    const label = { pass: "Pass", fail: "Fail", manual: s.kind === "procedure" ? (s.status === "verified" ? "Human control · evidenced" : "Human control") : "Not run" }[o.status];
+    let body = "";
+    if (s.kind === "engine" && o.r) {
+      if (o.r.error) body += `<div class="err">Engine error: ${esc(o.r.error)}</div>`;
+      body += `<div class="checks"><table><thead><tr><th>Check</th><th>Expected (from the rule)</th><th>Engine result</th><th></th></tr></thead><tbody>${o.r.checks.map((c) =>
+        `<tr><td>${esc(c.label)}</td><td class="mono">${esc(pretty(c.label, c.expected))}</td><td class="mono">${esc(pretty(c.label, c.actual))}</td><td class="${c.pass ? "ok" : "bad"}">${c.pass ? "✓" : "✗"}</td></tr>`).join("")}</tbody></table></div>`;
+      body += `<details><summary>Inputs</summary><p class="note mono">${esc(JSON.stringify({ ...(s.p || {}), risk: s.risk || "LOW", ...(s.triggers ? { triggers: s.triggers } : {}), ...(s.investigation ? { investigation: s.investigation } : {}), ...(s.evidence ? { controlEvidence: s.evidence } : {}) }))}</p><p class="note">All other fields: the base case, a new use of Copilot (AIR-SIM1) under the existing licence.</p></details>`;
+    } else if (s.kind === "workbook") {
+      body += `<div class="checks"><table><thead><tr><th>Sheet</th><th>Expected row check</th><th>Workbook result</th><th></th></tr></thead><tbody>${(o.rows && o.rows.length ? o.rows : [{ sheet: s.sheet, message: "not run" }]).map((r) =>
+        `<tr><td>${esc(r.sheet)}${r.row ? " row " + r.row : ""}</td><td class="mono">${esc(s.message)}</td><td class="mono">${esc(r.message)}</td><td class="${r.message === s.message ? "ok" : "bad"}">${r.message === s.message ? "✓" : "✗"}</td></tr>`).join("")}</tbody></table></div>`;
+    } else {
+      body += `<ol class="steps">${(s.steps || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ol><p class="why"><b>Expected:</b> ${esc(s.expected)}</p>${s.evidence ? `<p class="note">Evidence: ${esc(s.evidence)}</p>` : ""}`;
+    }
+    return `<article class="sc ${o.status}" id="sc-${esc(s.id)}"><div class="rail" aria-hidden="true"></div><div>
+      <div class="top"><span class="id">${esc(s.id)}</span><h3>${esc(s.t)}</h3><span class="pill ${o.status}">${label}</span>${s.decide ? '<span class="pill flag">Decision needed</span>' : ""}</div>
+      ${s.why ? `<p class="why">${esc(s.why)}</p>` : ""}
+      ${body}
+      ${s.decide ? `<div class="decide"><b>Decision needed:</b> ${esc(s.decide)}</div>` : ""}
+      <div class="refs">${(s.ref || []).map((r) => `<span class="ref">${esc(r)}</span>`).join("")}</div>
+    </div></article>`;
+  }
+
+  function render(){
+    const ql = q.toLowerCase();
+    const keep = (s) => {
+      const o = outcomes[s.id] || {};
+      const f = filter === "all" || (filter === "fail" ? o.status === "fail" : filter === "decide" ? !!s.decide : s.kind === filter);
+      return f && (!ql || JSON.stringify(s).toLowerCase().includes(ql));
+    };
+    const html = Object.keys(QA.GROUPS).map((k) => {
+      const items = QA.SCENARIOS.filter((s) => s.g === k && keep(s));
+      if (!items.length) return "";
+      return `<section class="group" aria-labelledby="g-${k}"><h2 id="g-${k}">${k} · ${esc(QA.GROUPS[k][0])} <small>${items.length} scenario${items.length > 1 ? "s" : ""}</small></h2><p class="gwhy">${esc(QA.GROUPS[k][1])}</p>${items.map(card).join("")}</section>`;
+    }).join("");
+    $("#list").innerHTML = html || '<p class="note">No scenarios match.</p>';
+  }
+
+  function mutations(){
+    const m = window.QA_MUTATIONS;
+    if (!m) return;
+    $("#mutTable tbody").innerHTML = m.results.map((r) => `<tr><td class="mono">${esc(r.id)}</td><td>${esc(r.name)}${r.note ? `<br><span class="note">${esc(r.note)}</span>` : ""}</td><td class="${r.caught ? "ok" : "bad"}">${r.applied ? (r.caught ? "Caught" : "Missed") : "Not applied"}</td><td class="mono">${esc((r.caughtBy || []).join(", "))}</td></tr>`).join("");
+  }
+
+  function wbMeta(){
+    const w = window.QA_WORKBOOK;
+    $("#wbMeta").textContent = w ? `${w.workbook}, ${w.version}, recalculated ${w.date}. Sample rows were written to a copy, recalculated with LibreOffice and each row-check cell read back. Reproduce with python3 scripts/check-gate-log.py <workbook>.` : "No workbook run recorded.";
+  }
+
+  document.querySelector(".bar").addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-f]"); if (!b) return;
+    filter = b.dataset.f;
+    document.querySelectorAll(".bar button[data-f]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    render();
+  });
+  $("#q").addEventListener("input", (e) => { q = e.target.value; render(); });
+  $("#rerun").addEventListener("click", runAll);
+
+  load(useLive ? LIVE : "engine/triage-logic.js").then(() => {
+    const L = window.TriageLogic;
+    const where = useLive ? "live triage tool (GitHub Pages)" : "copy in this repository (engine/triage-logic.js)";
+    $("#engineMeta").innerHTML = `Engine: ${esc(where)} · suite ${esc(L.SUITE.release)} · ${esc(L.SUITE.date)} · ${useLive ? '<a href="#" id="toLocal">use the pinned copy</a>' : '<a href="#live" id="toLive">run against the live triage tool</a>'}`;
+    $("#engineFoot").textContent = `${where}, suite ${L.SUITE.release}`;
+    const sw = $("#toLive") || $("#toLocal");
+    sw.addEventListener("click", (e) => { e.preventDefault(); location.hash = useLive ? "" : "live"; location.reload(); });
+    mutations(); wbMeta(); runAll();
+  }).catch((err) => { $("#engineMeta").innerHTML = `<span class="err">${esc(err.message)}</span>`; });
+})();
+</script>
+</body>
+</html>

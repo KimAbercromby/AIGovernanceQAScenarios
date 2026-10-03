@@ -1,0 +1,11 @@
+{
+  "name": "ai-governance-qa-scenarios",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Scenario test suite for the proposed AI governance suite (v3.9.7).",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "mutation": "node scripts/mutation-check.js",
+    "sync-engine": "sh scripts/sync-engine.sh"
+  }
+}
