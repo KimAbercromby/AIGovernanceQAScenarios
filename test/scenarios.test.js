@@ -27,3 +27,14 @@ test("every scenario has a rule reference and a unique id", () => {
 test("the vendored engine is the suite release the scenarios were written for", () => {
   assert.equal(L.SUITE.release, "v3.9.7");
 });
+
+// Workbook scenarios: the recorded LibreOffice run (scripts/check-gate-log.py) must give
+// the expected Row check message on every sample row for that scenario.
+test("every workbook scenario matches the recorded Gate Log run", () => {
+  const run = require("../results/workbook-results.json");
+  for (const s of QA.SCENARIOS.filter((x) => x.kind === "workbook")) {
+    const rows = run.results.filter((r) => r.scenario === s.id);
+    assert.ok(rows.length > 0, `${s.id} has no recorded workbook rows`);
+    for (const r of rows) assert.equal(r.message, s.message, `${s.id} ${r.sheet} row ${r.row}`);
+  }
+});

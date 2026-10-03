@@ -247,7 +247,12 @@
 
     // ---------------- H after ----------------
     { id: "H1", g: "H", kind: "procedure", t: "Incident: precautionary pause", steps: ["Post-Deployment: record a Precautionary pause event with incident ref and follow-up date."], expected: "Containment event; no decision reference needed.", ref: ["Playbook §4.7.17", R.gl] },
-    { id: "H2", g: "H", kind: "procedure", t: "Resume after a pause", steps: ["Record the follow-up decision."], expected: "Recorded as Progress or Re-authorise; there is no 'Resume' outcome.", ref: [R.gl], decide: "Add a 'Resume' outcome, or keep using Re-authorise?" },
+    { id: "H2", g: "H", kind: "workbook", t: "Resume straight after a precautionary pause (with a new condition)", sheet: "Gate events", message: "Check against source", ref: ["AIG-DEC-04 v1.3 Lists row 16", "Playbook §4.7.17"],
+      decided: "3 October 2026: add a 'Resume' outcome, allowed only as the next event for the same use after the pause; it carries over the approval (AIG-DEC-04 v1.3, AIG-DEC-03 v1.10)." },
+    { id: "H2b", g: "H", kind: "workbook", t: "Resume when the last event for that use was not the pause", sheet: "Gate events", message: "Resume is only for the event straight after a Precautionary pause on the same AIR-ID and UC-ID (in an earlier row)", ref: ["AIG-DEC-04 v1.3"] },
+    { id: "H2c", g: "H", kind: "workbook", t: "Resume for a use that was never paused", sheet: "Gate events", message: "Resume is only for the event straight after a Precautionary pause on the same AIR-ID and UC-ID (in an earlier row)", ref: ["AIG-DEC-04 v1.3"] },
+    { id: "H2d", g: "H", kind: "workbook", t: "Resume with 'screening considered' answered No", sheet: "Gate events", message: "Decision-maker has not confirmed the screening was considered (column X)", ref: ["AIG-DEC-04 v1.3 column X"] },
+    { id: "H2e", g: "H", kind: "workbook", t: "Resume entered on an Assurance opinion event", sheet: "Gate events", message: "Outcome implies decision", ref: ["AIG-DEC-04 v1.3"] },
     { id: "H3", g: "H", kind: "procedure", t: "Annual review, no change", steps: ["Gate 7 review event; re-confirm the screening reference."], expected: "Review recorded; screening reference still current.", ref: ["AIG-DEC-01 Gate 7", R.screen] },
     { id: "H4", g: "H", kind: "procedure", t: "Material change after approval", steps: ["Re-enter intake on the same AIR-ID (see A5)."], expected: "Full intake and triage before the changed use continues.", ref: [R.change] },
     { id: "H5", g: "H", kind: "procedure", t: "Retire one use of a multi-use system", steps: ["Triage tool retirement mode for that UC-ID."], expected: "Gate 8 for that UC-ID; the AIR-ID stays until every linked use is closed.", ref: ["AIG-DEC-01 Gate 8"] },

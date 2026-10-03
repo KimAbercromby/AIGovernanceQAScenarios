@@ -94,6 +94,48 @@
    "message": "Decision-maker has not confirmed the screening was considered (column X)"
   },
   {
+   "scenario": "H2",
+   "sheet": "Gate events",
+   "row": 15,
+   "message": "Check against source"
+  },
+  {
+   "scenario": "H2",
+   "sheet": "Gate events",
+   "row": 16,
+   "message": "Check against source"
+  },
+  {
+   "scenario": "H2b",
+   "sheet": "Gate events",
+   "row": 17,
+   "message": "Resume is only for the event straight after a Precautionary pause on the same AIR-ID and UC-ID (in an earlier row)"
+  },
+  {
+   "scenario": "H2c",
+   "sheet": "Gate events",
+   "row": 18,
+   "message": "Resume is only for the event straight after a Precautionary pause on the same AIR-ID and UC-ID (in an earlier row)"
+  },
+  {
+   "scenario": "H2",
+   "sheet": "Gate events",
+   "row": 19,
+   "message": "Check against source"
+  },
+  {
+   "scenario": "H2d",
+   "sheet": "Gate events",
+   "row": 20,
+   "message": "Decision-maker has not confirmed the screening was considered (column X)"
+  },
+  {
+   "scenario": "H2e",
+   "sheet": "Gate events",
+   "row": 21,
+   "message": "Outcome implies decision"
+  },
+  {
    "scenario": "G6",
    "sheet": "Conditions",
    "row": 4,
@@ -103,6 +145,12 @@
    "scenario": "G7",
    "sheet": "Conditions",
    "row": 5,
+   "message": "Check against source"
+  },
+  {
+   "scenario": "H2",
+   "sheet": "Conditions",
+   "row": 6,
    "message": "Check against source"
   }
  ]
