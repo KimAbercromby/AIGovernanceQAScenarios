@@ -63,7 +63,7 @@
       add("Fast-Track contradiction flagged", e.conflict.source, c || "none", e.conflict.test(c));
     }
     if (e.answerWarn) {
-      const w = (L.answerConflicts ? L.answerConflicts(profile) : []).join(" ");
+      const w = (L.answerConflicts ? L.answerConflicts(profile, results) : []).join(" ");
       add("Contradiction warning shown", e.answerWarn.source, w || "none", e.answerWarn.test(w));
     }
     if (e.block) {
