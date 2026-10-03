@@ -1,6 +1,6 @@
 {
  "date": "2026-10-03",
- "engine": "Copied from KimAbercromby/AIGovernanceTriage-MultiBoard src/triage-logic.js at commit 673a7ec (2026-10-03)",
+ "engine": "Copied from KimAbercromby/AIGovernanceTriage-MultiBoard src/triage-logic.js at commit 58b4d0c (2026-10-03)",
  "results": [
   {
    "id": "M1",
@@ -22,6 +22,8 @@
    "caughtBy": [
     "A1b",
     "A5b",
+    "A6",
+    "A6b",
     "A7",
     "A8",
     "B1",
@@ -48,6 +50,8 @@
     "A1",
     "A1b",
     "A5b",
+    "A6",
+    "A6b",
     "A7",
     "A8",
     "A10",
@@ -156,6 +160,16 @@
    "caught": true,
    "caughtBy": [
     "E6"
+   ]
+  },
+  {
+   "id": "M13",
+   "name": "Lapsed system approval not checked",
+   "applied": true,
+   "caught": true,
+   "caughtBy": [
+    "A6",
+    "A6b"
    ]
   },
   {

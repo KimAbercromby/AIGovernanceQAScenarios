@@ -28,7 +28,7 @@
     source: "Embedded in platform / supplier feature", capability: "Generative AI",
     actionAuthority: "None — outputs only", systemsAccessed: "Team meeting notes the user can open",
     lifecycle: "Idea", dataType: "Personal data", procurementRoute: "Existing contract or licence",
-    newInvestment: NO_INVEST, affectsIndividuals: "No", publicFacing: "No", dateFirstUsed: "",
+    newInvestment: NO_INVEST, systemApproval: "Yes — Approved and Active, review not overdue", affectsIndividuals: "No", publicFacing: "No", dateFirstUsed: "",
   };
   const AGPI_LOW = { resident: 1, trust: 2, legal: 2, visibility: 2, strategic: 1, oversight: 1 }; // 13.75, Priority 5
   const AGPI_P4 = { resident: 3, trust: 2, legal: 2, visibility: 2, strategic: 3, oversight: 2 };  // 33.75, Priority 4
@@ -93,10 +93,12 @@
     { id: "A5b", g: "A", kind: "engine", t: "Change to an approved use that needs new money",
       p: { situation: "Change to a use in governance", newInvestment: "Yes" }, risk: "LOW", expect: { route: "re-entry", light: false, gates: "RCRNCR" }, ref: [R.change, R.g13],
       why: "New money brings Gates 1 and 3 back." },
-    { id: "A6", g: "A", kind: "engine", t: "New use of a system whose approval has lapsed (engine cannot see this)",
-      p: {}, risk: "LOW", expect: { tier: "Low", route: "light", gates: "NCNNCR" }, ref: [R.g13],
-      why: "The rule needs the system approval to be current. The engine cannot read the Register, so it proposes N/A and the governance steward must refuse it. This test proves the control is manual.",
-      decide: "Keep this as a steward check, or add 'Is the system approval current?' to Intake and the engine?" },
+    { id: "A6", g: "A", kind: "engine", t: "New use of a system whose approval has lapsed",
+      p: { systemApproval: "No — suspended, lapsed or review overdue" }, risk: "LOW", expect: { tier: "Low", route: "light", gates: "RCRNCR" }, ref: [R.g13, "AIG-INV-03 v1.9 (Is the system's approval current?)"],
+      why: "Gates 1 and 3 only fall away when the existing system's approval is confirmed current. The governance steward also checks the answer against the Register.",
+      decided: "3 October 2026: Intake and the triage tool ask whether the system's approval is current (Unsure counts as No)." },
+    { id: "A6b", g: "A", kind: "engine", t: "Approval status not known (Unsure)",
+      p: { systemApproval: "Unsure (counts as No)" }, risk: "LOW", expect: { gates: "RCRNCR" }, ref: [R.g13], why: "Unsure counts as No." },
     { id: "A7", g: "A", kind: "engine", t: "AI found already in use, never registered (shadow AI)",
       p: { situation: "Found already in use", registerId: "", lifecycle: "Live", procurementRoute: "Not yet known", newInvestment: "Unsure (counts as Yes)" }, risk: "LOW",
       expect: { tier: "Low", route: "retrospective", light: false, gates: "RCRCCR" }, ref: [R.found, R.g13],

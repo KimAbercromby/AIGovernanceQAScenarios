@@ -25,6 +25,7 @@ const MUTATIONS = [
   { id: "M9", name: "Per-action review 'Unsure' treated as Yes (drops the Critical floor)", from: 'if (authority === ACTION_AUTHORITY.unsure) return "Unsure";', to: 'if (authority === ACTION_AUTHORITY.unsure) return "Yes";' },
   { id: "M10", name: "Impact 5 floor removed", from: 'const impactFloorTier = Number(impact) === 5 ? "Medium" : null;', to: "const impactFloorTier = null;" },
   { id: "M11", name: "Public-facing no longer contradicts an all-No Fast Track", from: 'if (p.publicFacing === "Yes") out.push(', to: "if (false) out.push(" },
+  { id: "M13", name: "Lapsed system approval not checked", from: "if (existing && systemApprovalOf(profile) !== SYSTEM_APPROVAL.yes) common.push(", to: "if (false) common.push(" },
   { id: "M12", name: "Screening not carried to Gate 6 when Gates 1 and 3 are N/A", from: "...(g13.na3 && !gate5Required ? CARRIED_FROM_GATES_1_3 : []),", to: "" },
 ];
 
