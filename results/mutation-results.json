@@ -1,6 +1,6 @@
 {
  "date": "2026-10-03",
- "engine": "Copied from KimAbercromby/AIGovernanceTriage-MultiBoard src/triage-logic.js at commit 1ed38cd (2026-10-03)",
+ "engine": "Copied from KimAbercromby/AIGovernanceTriage-MultiBoard src/triage-logic.js at commit 673a7ec (2026-10-03)",
  "results": [
   {
    "id": "M1",
@@ -21,7 +21,7 @@
    "caught": true,
    "caughtBy": [
     "A1b",
-    "A5",
+    "A5b",
     "A7",
     "A8",
     "B1",
@@ -47,7 +47,7 @@
    "caughtBy": [
     "A1",
     "A1b",
-    "A5",
+    "A5b",
     "A7",
     "A8",
     "A10",
@@ -126,6 +126,7 @@
    "caught": true,
    "caughtBy": [
     "A5",
+    "A5b",
     "A7",
     "A8"
    ]
