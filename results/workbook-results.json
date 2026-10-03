@@ -1,6 +1,6 @@
 {
  "workbook": "AIG-DEC-04_Gate_Log_Proposed.xlsx",
- "version": "1.2 draft",
+ "version": "1.3 draft",
  "date": "2026-10-03",
  "results": [
   {
@@ -82,6 +82,60 @@
    "message": "Check against source"
   },
   {
+   "scenario": "G9",
+   "sheet": "Gate events",
+   "row": 13,
+   "message": "Decision-maker has not confirmed the screening was considered (column X)"
+  },
+  {
+   "scenario": "G9b",
+   "sheet": "Gate events",
+   "row": 14,
+   "message": "Decision-maker has not confirmed the screening was considered (column X)"
+  },
+  {
+   "scenario": "H2",
+   "sheet": "Gate events",
+   "row": 15,
+   "message": "Check against source"
+  },
+  {
+   "scenario": "H2",
+   "sheet": "Gate events",
+   "row": 16,
+   "message": "Check against source"
+  },
+  {
+   "scenario": "H2b",
+   "sheet": "Gate events",
+   "row": 17,
+   "message": "Resume is only for the event straight after a Precautionary pause on the same AIR-ID and UC-ID (in an earlier row)"
+  },
+  {
+   "scenario": "H2c",
+   "sheet": "Gate events",
+   "row": 18,
+   "message": "Resume is only for the event straight after a Precautionary pause on the same AIR-ID and UC-ID (in an earlier row)"
+  },
+  {
+   "scenario": "H2",
+   "sheet": "Gate events",
+   "row": 19,
+   "message": "Check against source"
+  },
+  {
+   "scenario": "H2d",
+   "sheet": "Gate events",
+   "row": 20,
+   "message": "Decision-maker has not confirmed the screening was considered (column X)"
+  },
+  {
+   "scenario": "H2e",
+   "sheet": "Gate events",
+   "row": 21,
+   "message": "Outcome implies decision"
+  },
+  {
    "scenario": "G6",
    "sheet": "Conditions",
    "row": 4,
@@ -91,6 +145,12 @@
    "scenario": "G7",
    "sheet": "Conditions",
    "row": 5,
+   "message": "Check against source"
+  },
+  {
+   "scenario": "H2",
+   "sheet": "Conditions",
+   "row": 6,
    "message": "Check against source"
   }
  ]

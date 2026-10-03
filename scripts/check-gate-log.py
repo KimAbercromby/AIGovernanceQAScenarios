@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reproduce the Gate Log (AIG-DEC-04) workbook checks for scenarios G1 to G7.
+"""Reproduce the Gate Log (AIG-DEC-04) workbook checks for scenarios G1 to G9 and H2.
 
 Usage: python3 scripts/check-gate-log.py <AIG-DEC-04_Gate_Log_Proposed.xlsx> [path/to/recalc.py]
 
@@ -29,7 +29,7 @@ plan = {  # row: (scenario, values)
 }
 base = dict(B="AIR-T001", F=d, H="Officer", I="DEC-1", P="UC-ID specific")
 events = {
-    4: ("G7", dict(A="EV-1", C="PL-1", D=g6, E="Decision", G="Progress", O="UC-1")),
+    4: ("G7", dict(A="EV-1", C="PL-1", D=g6, E="Decision", G="Progress", O="UC-1", X="Yes")),
     5: ("G2", dict(A="EV-2", C="PL-1", D=g1, E="Decision", G="Progress", O="UC-1")),
     6: ("G2b", dict(A="EV-3", C="PL-1", D=g6, E="Decision", G="Progress", O="UC-9")),
     7: ("G3b", dict(A="EV-4", D=g6, E="Assurance opinion", G="Opinion only", O="UC-1")),
@@ -37,11 +37,21 @@ events = {
     9: ("G4", dict(A="EV-6", D=g6, E="Decision", G="Progress", O="UC-1 UC-2")),
     10: ("G5", dict(A="EV-7", D=g6, E="Precautionary pause (containment)", G="Paused — pending decision", V="INC-1", W=datetime.datetime(2026, 9, 1), O="UC-1")),
     11: ("G7", dict(A="EV-8", D=g0, E="Intake / registration", G="No decision", O="UC-1")),
-    12: ("G7", dict(A="EV-9", D=g6, E="Decision", G="Progress with condition", O="UC-1")),
+    12: ("G7", dict(A="EV-9", D=g6, E="Decision", G="Progress with condition", O="UC-1", X="Yes")),
+    13: ("G9", dict(A="EV-10", D=g6, E="Decision", G="Progress", O="UC-1")),
+    14: ("G9b", dict(A="EV-11", D=g6, E="Decision", G="Re-authorise", O="UC-1", X="No")),
+    15: ("H2", dict(A="EV-12", D=g6, E="Precautionary pause (containment)", G="Paused — pending decision", V="INC-2", W=datetime.datetime(2026, 10, 20), O="UC-5")),
+    16: ("H2", dict(A="EV-13", D=g6, E="Decision", G="Resume", O="UC-5", X="Yes")),
+    17: ("H2b", dict(A="EV-14", D=g6, E="Decision", G="Resume", O="UC-1", X="Yes")),
+    18: ("H2c", dict(A="EV-15", D=g6, E="Decision", G="Resume", O="UC-6", X="Yes")),
+    19: ("H2", dict(A="EV-16", D=g6, E="Precautionary pause (containment)", G="Paused — pending decision", V="INC-3", W=datetime.datetime(2026, 10, 20), O="UC-7")),
+    20: ("H2d", dict(A="EV-17", D=g6, E="Decision", G="Resume", O="UC-7", X="No")),
+    21: ("H2e", dict(A="EV-18", D=g6, E="Assurance opinion", G="Resume", J="AO-1", O="UC-5")),
 }
 conds = {
     4: ("G6", dict(A="C-1", B="EV-9", C="AIR-T001", D="do x", E="Owner", F=datetime.datetime(2027, 1, 1), G="Unknown", K="UC-1", L="UC-ID specific")),
     5: ("G7", dict(A="C-2", B="EV-9", C="AIR-T001", D="do y", E="Owner", F=datetime.datetime(2027, 1, 1), G="Open", K="UC-1", L="UC-ID specific")),
+    6: ("H2", dict(A="C-3", B="EV-13", C="AIR-T001", D="extra check after the pause", E="Owner", F=datetime.datetime(2027, 1, 1), G="Open", K="UC-5", L="UC-ID specific")),
 }
 for r, (_, v) in plan.items(): put(P, r, **v)
 for r, (_, v) in events.items(): put(E, r, **{**base, **v})
