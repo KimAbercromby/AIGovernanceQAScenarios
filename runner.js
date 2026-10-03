@@ -62,6 +62,10 @@
       const c = L.fastTrackConflicts(profile).join("; ");
       add("Fast-Track contradiction flagged", e.conflict.source, c || "none", e.conflict.test(c));
     }
+    if (e.answerWarn) {
+      const w = (L.answerConflicts ? L.answerConflicts(profile) : []).join(" ");
+      add("Contradiction warning shown", e.answerWarn.source, w || "none", e.answerWarn.test(w));
+    }
     if (e.block) {
       const b = L.lightTouchBlockReason(profile, results);
       add("Reason shown for no Light-touch", e.block.source, b || "none", e.block.test(b));

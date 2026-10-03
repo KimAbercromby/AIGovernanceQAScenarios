@@ -1,6 +1,6 @@
 {
  "date": "2026-10-03",
- "engine": "Copied from KimAbercromby/AIGovernanceTriage-MultiBoard src/triage-logic.js at commit 58b4d0c (2026-10-03)",
+ "engine": "Copied from KimAbercromby/AIGovernanceTriage-MultiBoard src/triage-logic.js at commit d90ffc6 (2026-10-03)",
  "results": [
   {
    "id": "M1",
@@ -170,6 +170,15 @@
    "caughtBy": [
     "A6",
     "A6b"
+   ]
+  },
+  {
+   "id": "M14",
+   "name": "Contradiction warning removed",
+   "applied": true,
+   "caught": true,
+   "caughtBy": [
+    "B4"
    ]
   },
   {
