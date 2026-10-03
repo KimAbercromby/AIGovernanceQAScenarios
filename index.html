@@ -120,7 +120,7 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
   </section>
 
   <section class="panel" aria-labelledby="wb-h">
-    <h2 id="wb-h">Gate Log workbook run</h2>
+    <h2 id="wb-h">Workbook runs (Gate Log and Register)</h2>
     <p class="note" id="wbMeta"></p>
   </section>
 
@@ -177,7 +177,7 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
     const fails = eng.length - engPass + wb.length - wbPass;
     $("#strip").innerHTML = [
       [`${engPass} / ${eng.length}`, "engine scenarios pass", engPass === eng.length ? "pass" : "fail"],
-      [`${wbPass} / ${wb.length}`, "Gate Log checks confirmed", wbPass === wb.length ? "pass" : "fail"],
+      [`${wbPass} / ${wb.length}`, "workbook checks confirmed", wbPass === wb.length ? "pass" : "fail"],
       [`${mCaught} / ${m.length}`, "planted bugs caught", mCaught === m.length ? "pass" : "fail"],
       [`${pr.length}`, `human controls (${prVer} evidenced)`, ""],
       [`${dec}`, "need a policy decision", "flag"],
@@ -233,7 +233,7 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
 
   function wbMeta(){
     const w = window.QA_WORKBOOK;
-    $("#wbMeta").textContent = w ? `${w.workbook}, ${w.version}, recalculated ${w.date}. Sample rows were written to a copy, recalculated with LibreOffice and each row-check cell read back. Reproduce with python3 scripts/check-gate-log.py <workbook>.` : "No workbook run recorded.";
+    $("#wbMeta").textContent = w ? `${w.workbook}, ${w.version}${w.also && w.also.length ? " and " + w.also.join(", ") : ""}, recalculated ${w.date}. Sample rows were written to a copy, recalculated with LibreOffice and each row-check cell read back. Reproduce with python3 scripts/check-gate-log.py <workbook>.` : "No workbook run recorded.";
   }
 
   document.querySelector(".bar").addEventListener("click", (e) => {
