@@ -239,7 +239,11 @@
     { id: "G9b", g: "G", kind: "workbook", t: "Re-authorise with 'screening considered' answered No", sheet: "Gate events", message: "Decision-maker has not confirmed the screening was considered (column X)", ref: ["AIG-DEC-04 v1.3 column X"] },
     { id: "G7", g: "G", kind: "workbook", t: "A complete, correct row", sheet: "All sheets", message: "Check against source", ref: [R.gl], why: "The control: valid rows must still pass." },
     { id: "G8", g: "G", kind: "engine", t: "Tool export warns not to paste over column M", p: {}, risk: "LOW", expect: { columnM: true, planJBlank: true }, ref: [R.gl],
-      why: "Column M is the workbook row check; column J is left for the steward.", decide: "Leave as a warning, or lock column M in the workbook?" },
+      why: "Column M is the workbook row check; column J is left for the steward.", decided: "3 October 2026: keep the warning and lock the row-check columns in the Gate Log with sheet protection, no password (AIG-DEC-04 v1.3)." },
+    { id: "G8b", g: "G", kind: "procedure", t: "Row-check columns are locked in the workbook", status: "verified",
+      steps: ["Open AIG-DEC-04 v1.3; try to type or paste into Gate plan M, Gate events N or Q, or Conditions J.", "Type into any input column on the same rows."],
+      expected: "Excel refuses the edit to a row-check column; input columns stay editable; filtering and sorting still work. The steward can unprotect the sheet (no password) for maintenance.",
+      ref: ["AIG-DEC-04 v1.3 sheet protection"], evidence: "Workbook read back on 3 October 2026: sheets protected; row-check cells locked, every input cell (rows 4 to 553) unlocked" },
 
     // ---------------- H after ----------------
     { id: "H1", g: "H", kind: "procedure", t: "Incident: precautionary pause", steps: ["Post-Deployment: record a Precautionary pause event with incident ref and follow-up date."], expected: "Containment event; no decision reference needed.", ref: ["Playbook §4.7.17", R.gl] },
