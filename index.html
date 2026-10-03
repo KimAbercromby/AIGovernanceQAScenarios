@@ -71,6 +71,8 @@ td.ok{color:var(--pass);font-weight:600} td.bad{color:var(--fail);font-weight:60
 .ref{font-size:12px;border:1px solid var(--line);border-radius:4px;padding:1px 7px;color:var(--muted)}
 .decide{font-size:13.5px;background:var(--flag-bg);border-radius:6px;padding:8px 10px}
 .decide b{color:var(--flag)}
+.decided{font-size:13.5px;background:var(--pass-bg);border-radius:6px;padding:8px 10px}
+.decided b{color:var(--pass)}
 ol.steps{margin:0;padding-left:20px;font-size:14px}
 details summary{cursor:pointer;font-size:13px;color:var(--accent)}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px;display:grid;gap:10px;min-width:0}
@@ -199,10 +201,11 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
       body += `<ol class="steps">${(s.steps || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ol><p class="why"><b>Expected:</b> ${esc(s.expected)}</p>${s.evidence ? `<p class="note">Evidence: ${esc(s.evidence)}</p>` : ""}`;
     }
     return `<article class="sc ${o.status}" id="sc-${esc(s.id)}"><div class="rail" aria-hidden="true"></div><div>
-      <div class="top"><span class="id">${esc(s.id)}</span><h3>${esc(s.t)}</h3><span class="pill ${o.status}">${label}</span>${s.decide ? '<span class="pill flag">Decision needed</span>' : ""}</div>
+      <div class="top"><span class="id">${esc(s.id)}</span><h3>${esc(s.t)}</h3><span class="pill ${o.status}">${label}</span>${s.decide ? '<span class="pill flag">Decision needed</span>' : ""}${s.decided ? '<span class="pill pass">Decided</span>' : ""}</div>
       ${s.why ? `<p class="why">${esc(s.why)}</p>` : ""}
       ${body}
       ${s.decide ? `<div class="decide"><b>Decision needed:</b> ${esc(s.decide)}</div>` : ""}
+      ${s.decided ? `<div class="decided"><b>Decided:</b> ${esc(s.decided)}</div>` : ""}
       <div class="refs">${(s.ref || []).map((r) => `<span class="ref">${esc(r)}</span>`).join("")}</div>
     </div></article>`;
   }

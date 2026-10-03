@@ -1,6 +1,6 @@
 {
  "date": "2026-10-03",
- "engine": "Copied from KimAbercromby/AIGovernanceTriage-MultiBoard src/triage-logic.js at commit a35a3cf (2026-10-03)",
+ "engine": "Copied from KimAbercromby/AIGovernanceTriage-MultiBoard src/triage-logic.js at commit 1ed38cd (2026-10-03)",
  "results": [
   {
    "id": "M1",
@@ -16,11 +16,37 @@
   },
   {
    "id": "M2",
-   "name": "Gates 1 and 3 always proposed N/A",
+   "name": "Gate 3 (business case) always proposed N/A",
+   "applied": true,
+   "caught": true,
+   "caughtBy": [
+    "A1b",
+    "A5",
+    "A7",
+    "A8",
+    "B1",
+    "B1b",
+    "B2",
+    "B3",
+    "B4",
+    "B6",
+    "C2",
+    "C3",
+    "C6",
+    "D1",
+    "D2",
+    "D3",
+    "D4"
+   ]
+  },
+  {
+   "id": "M2b",
+   "name": "Gate 1 always proposed N/A",
    "applied": true,
    "caught": true,
    "caughtBy": [
     "A1",
+    "A1b",
     "A5",
     "A7",
     "A8",
@@ -74,7 +100,7 @@
   },
   {
    "id": "M6",
-   "name": "Gate 1 and 3 rule accepts any AIR-ID text",
+   "name": "A system new to the Council skips Gate 1",
    "applied": true,
    "caught": true,
    "caughtBy": [
@@ -137,6 +163,7 @@
    "applied": true,
    "caught": true,
    "caughtBy": [
+    "A1",
     "A2"
    ]
   }

@@ -14,17 +14,18 @@ const SRC = fs.readFileSync(path.join(__dirname, "..", "engine", "triage-logic.j
 const MUTATIONS = [
   { id: "M1", name: "Light-touch ignores the Fast-Track answers", note: "The defect found in the Copilot simulation on 3 October 2026.",
     from: "return lowTierCandidate(profile, results) && fastTrackOf(profile) === FAST_TRACK.allNo &&\n      !fastTrackConflicts(profile).length;", to: "return lowTierCandidate(profile, results);" },
-  { id: "M2", name: "Gates 1 and 3 always proposed N/A", from: "const na = reasons.length === 0;", to: "const na = true;" },
-  { id: "M3", name: "Investment 'Unsure' treated as 'No'", from: "if (newInvestmentOf(profile) !== NEW_INVESTMENT.no)", to: "if (newInvestmentOf(profile) === NEW_INVESTMENT.yes)" },
-  { id: "M4", name: "Gate 1 and 3 rule ignores the risk tier", from: 'if (tier !== "Low" && tier !== "Medium") reasons.push(', to: "if (false) reasons.push(" },
-  { id: "M5", name: "Gate 1 and 3 rule ignores 'can it act?'", from: 'if (isActionCapable(profile, results && results.triggerIds)) reasons.push("the use can act");', to: "" },
-  { id: "M6", name: "Gate 1 and 3 rule accepts any AIR-ID text", from: 'if (!/^AIR-[A-Z0-9]/i.test((profile && profile.registerId) || ""))', to: "if (false)" },
-  { id: "M7", name: "Unknown procurement route counts as no investment", from: 'if (proc === PROCUREMENT.unknown) reasons.push(', to: "if (false) reasons.push(" },
+  { id: "M2", name: "Gate 3 (business case) always proposed N/A", from: "const na3 = common.length === 0;", to: "const na3 = true;" },
+  { id: "M2b", name: "Gate 1 always proposed N/A", from: "const na1 = reasons1.length === 0;", to: "const na1 = true;" },
+  { id: "M3", name: "Investment 'Unsure' treated as 'No'", from: "if (newInvestmentOf(profile) !== NEW_INVESTMENT.no) common.push(", to: "if (newInvestmentOf(profile) === NEW_INVESTMENT.yes) common.push(" },
+  { id: "M4", name: "Gate 1 and 3 rule ignores the risk tier", from: 'if (tier !== "Low" && tier !== "Medium") common.push(', to: "if (false) common.push(" },
+  { id: "M5", name: "Gate 1 and 3 rule ignores 'can it act?'", from: 'if (isActionCapable(profile, results && results.triggerIds)) common.push("the use can act");', to: "" },
+  { id: "M6", name: "A system new to the Council skips Gate 1", from: 'const existing = /^AIR-[A-Z0-9]/i.test((profile && profile.registerId) || "");', to: "const existing = true;" },
+  { id: "M7", name: "Unknown procurement route counts as no investment", from: 'if (proc === PROCUREMENT.unknown) common.push(', to: "if (false) common.push(" },
   { id: "M8", name: "Found-in-use AI allowed onto Light-touch", from: "const newUse = situationOf(profile) === SITUATIONS.new && !isFoundInUse(profile);", to: "const newUse = true;" },
   { id: "M9", name: "Per-action review 'Unsure' treated as Yes (drops the Critical floor)", from: 'if (authority === ACTION_AUTHORITY.unsure) return "Unsure";', to: 'if (authority === ACTION_AUTHORITY.unsure) return "Yes";' },
   { id: "M10", name: "Impact 5 floor removed", from: 'const impactFloorTier = Number(impact) === 5 ? "Medium" : null;', to: "const impactFloorTier = null;" },
   { id: "M11", name: "Public-facing no longer contradicts an all-No Fast Track", from: 'if (p.publicFacing === "Yes") out.push(', to: "if (false) out.push(" },
-  { id: "M12", name: "Screening not carried to Gate 6 when Gates 1 and 3 are N/A", from: "...(g13.na && !gate5Required ? CARRIED_FROM_GATES_1_3 : []),", to: "" },
+  { id: "M12", name: "Screening not carried to Gate 6 when Gates 1 and 3 are N/A", from: "...(g13.na3 && !gate5Required ? CARRIED_FROM_GATES_1_3 : []),", to: "" },
 ];
 
 function load(src) {

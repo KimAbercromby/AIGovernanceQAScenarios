@@ -42,7 +42,7 @@
   };
 
   const R = {
-    g13: "AIG-DEC-01 v1.11 Gate 1 and 3 rule",
+    g13: "AIG-DEC-01 v1.12 Gate 1 and 3 rule",
     g2: "AIG-DEC-01 v1.11 Gate 2 (mandatory for High, Critical and action-capable uses)",
     g4: "AIG-DEC-01 v1.11 Gate 4 rule",
     g5: "AIG-DEC-01 v1.11 Gate 5 (from Medium)",
@@ -70,9 +70,12 @@
     // ---------------- A identity ----------------
     { id: "A1", g: "A", kind: "engine", t: "Brand-new system (no AIR-ID), free public tool, low-risk staff use",
       p: { registerId: "", source: "Free / public tool", procurementRoute: "Free public tool" }, risk: "LOW",
-      expect: { tier: "Low", route: "light", gates: "RCRNCR" }, ref: [R.g13, R.g4, R.lt],
-      why: "A new system always counts as new investment, so Gates 1 and 3 apply even on the Light-touch route.",
-      decide: "Light-touch plus two investment forums for a free, low-risk tool. Is that intended, or should a free tool at Low go straight to the delegated decision?" },
+      expect: { tier: "Low", route: "light", gates: "RCNNCR", g6carries: true }, ref: [R.g13, R.g4, R.lt],
+      why: "A tool new to the Council always goes to Gate 1 (should the Council take it on?), even if free. With no money involved, Gate 3 (the business case) is N/A and its screening, purpose and benefits move to Gate 6.",
+      decided: "3 October 2026: keep Gate 1 for any new system; drop Gate 3 where there is no cost (AIG-DEC-01 v1.12)." },
+    { id: "A1b", g: "A", kind: "engine", t: "Brand-new system that needs a new contract",
+      p: { registerId: "", source: "Procured", procurementRoute: "New contract, licence change or contract variation", newInvestment: "Yes", fastTrack: "One or more Yes or Unsure" }, risk: "LOW",
+      expect: { route: "standard", gates: "RCRRCR" }, ref: [R.g13, R.g4], why: "New money: Gates 1, 3 and 4 all apply." },
     { id: "A2", g: "A", kind: "engine", t: "Existing approved system, new use, no new money (the Copilot meeting-notes case)",
       p: {}, risk: "LOW", expect: { tier: "Low", route: "light", gates: "NCNNCR", g6carries: true }, ref: [R.g13, R.lt, R.screen],
       why: "The baseline case: intake event, one delegated decision at Gate 6, annual review. What Gates 1 and 3 carried moves to Gate 6." },
@@ -103,10 +106,10 @@
       p: { ucId: "", ucIdStatus: "Pending — no UC-ID entered" }, risk: "LOW", expect: { tier: "Low", route: "light", gates: "NCNNCR", planUcBlank: true }, ref: [R.g13, R.gl],
       why: "Gate plan rows leave the UC-ID blank, so the Gate Log flags 'UC-ID required' until the steward adds it." },
     { id: "A10", g: "A", kind: "engine", t: "AIR-ID typed wrongly ('AIR-' or a name)",
-      p: { registerId: "AIR-" }, risk: "LOW", expect: { tier: "Low", route: "light", gates: "RCRNCR" }, ref: [R.g13],
-      why: "An incomplete AIR-ID is treated as no AIR-ID, so the use is treated as a new system." },
+      p: { registerId: "AIR-" }, risk: "LOW", expect: { tier: "Low", route: "light", gates: "RCNNCR" }, ref: [R.g13],
+      why: "An incomplete AIR-ID is treated as no AIR-ID, so the use is treated as a new system: Gate 1 applies, Gate 3 does not (no money)." },
     { id: "A10b", g: "A", kind: "engine", t: "AIR-ID field holds the product name instead of an ID",
-      p: { registerId: "Copilot" }, risk: "LOW", expect: { tier: "Low", route: "light", gates: "RCRNCR" }, ref: [R.g13] },
+      p: { registerId: "Copilot" }, risk: "LOW", expect: { tier: "Low", route: "light", gates: "RCNNCR" }, ref: [R.g13] },
     { id: "A11", g: "A", kind: "procedure", t: "One request that covers two different uses",
       steps: ["Split into two UC-IDs, e.g. meeting summaries and drafting replies to residents.", "Triage each separately in the triage tool."],
       expected: "Each use gets its own route; the resident-facing drafting use is not Light-touch (Q5 Yes).", ref: ["Playbook §3.10.1 (a lower-risk use must not conceal a higher-risk use)"] },
@@ -131,7 +134,7 @@
       p: { newInvestment: "Yes" }, risk: "LOW", expect: { route: "light", gates: "RCRNCR" }, ref: [R.g13], why: "Usage charges count as new investment." },
     { id: "B7", g: "B", kind: "engine", t: "New system that is a free public tool (e.g. a free chatbot)",
       p: { registerId: "", source: "Free / public tool", procurementRoute: "Free public tool", capability: "Generative AI" }, risk: "LOW",
-      expect: { route: "light", gates: "RCRNCR" }, ref: [R.g13, R.g4] },
+      expect: { route: "light", gates: "RCNNCR" }, ref: [R.g13, R.g4], why: "Same as A1: Gate 1 for a new tool, no Gate 3 without money." },
 
     // ---------------- C tier ----------------
     { id: "C1", g: "C", kind: "engine", t: "Medium risk, existing system, no new money",
