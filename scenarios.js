@@ -15,7 +15,7 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
 
-  const SUITE = "v3.9.8 (3 October 2026)";
+  const SUITE = "v3.9.9 (4 October 2026)";
   const NO_INVEST = "No — no new funding, licences, charges, procurement, contract or licence change";
 
   // A new use of Microsoft 365 Copilot, already on the Register (fictional AIR-SIM1).
@@ -42,10 +42,10 @@
   };
 
   const R = {
-    g13: "AIG-DEC-01 v1.12 Gate 1 and 3 rule",
-    g2: "AIG-DEC-01 v1.12 Gate 2 (mandatory for High, Critical and action-capable uses)",
-    g4: "AIG-DEC-01 v1.12 Gate 4 rule",
-    g5: "AIG-DEC-01 v1.12 Gate 5 (from Medium)",
+    g13: "AIG-DEC-01 Gate 1 and 3 rule (from v1.12)",
+    g2: "AIG-DEC-01 v1.13 Gate 2 (mandatory for High, Critical and action-capable uses)",
+    g4: "AIG-DEC-01 v1.13 Gate 4 rule",
+    g5: "AIG-DEC-01 v1.13 Gate 5 (from Medium)",
     lt: "Playbook §3.8.2.1 and Appendix F.6; AIG-INV-02 v1.9",
     found: "Playbook §3.8; AIG-INV-02 (found in use is never Fast Track)",
     change: "AIG-DEC-01 Gate 7 (re-entry on the same AIR-ID)",
@@ -53,6 +53,7 @@
     agentic: "Playbook §4.4.6 agentic trigger; AIG-DEC-01 rules R1 to R3",
     screen: "Playbook §4.6 screening by reference; AIG-INV-02 Part C",
     gl: "AIG-DEC-04 v1.3 row checks",
+    asbom: "Playbook F.3 (v19.9.18); AIG-AGT-04 v0.6 column BL",
   };
 
   const GROUPS = {
@@ -64,6 +65,7 @@
     F: ["Screening by reference", "When an existing assessment can be cited, and when fresh screening is needed."],
     G: ["Gate Log checks", "Mechanical row checks in the Gate Log workbook."],
     H: ["After the decision", "Pause, review, change, retirement and the Post-Deployment handoff."],
+    I: ["Agent Record (ASBOM)", "How much of the Agent Record an agent needs: core, core plus feature sheets, or the full ASBOM."],
   };
 
   const S = [
@@ -259,6 +261,28 @@
     { id: "H3", g: "H", kind: "procedure", t: "Annual review, no change", steps: ["Gate 7 review event; re-confirm the screening reference."], expected: "Review recorded; screening reference still current.", ref: ["AIG-DEC-01 Gate 7", R.screen] },
     { id: "H4", g: "H", kind: "procedure", t: "Material change after approval", steps: ["Re-enter intake on the same AIR-ID (see A5)."], expected: "Full intake and triage before the changed use continues.", ref: [R.change] },
     { id: "H5", g: "H", kind: "procedure", t: "Retire one use of a multi-use system", steps: ["Triage tool retirement mode for that UC-ID."], expected: "Gate 8 for that UC-ID; the AIR-ID stays until every linked use is closed.", ref: ["AIG-DEC-01 Gate 8"] },
+    // ---------------- I Agent Record level (suite v3.9.9) ----------------
+    { id: "I1", g: "I", kind: "engine", t: "Simple T0 agent: drafts emails a person sends, no memory or delegation", agency: { dims: {} },
+      expect: { agencyTier: "T0", recordLevel: "Core", noSheets: true }, ref: [R.asbom],
+      why: "Every agent that can act needs the core record, and nothing more unless its tier or features call for it." },
+    { id: "I2", g: "I", kind: "engine", t: "Agent that delegates to another agent", agency: { dims: {}, mult: ["Delegation"] },
+      expect: { agencyTier: "T2", recordLevel: "Core plus features", sheets: ["Authority & Delegations", "Agent Authority Graph (AIG-AGT-05)"] }, ref: [R.asbom, "AIG-AGT-05 v1.5 (when required)"],
+      why: "Delegation switches on the Authority & Delegations sheet and, with it, the Authority Graph." },
+    { id: "I3", g: "I", kind: "engine", t: "Agent with memory and tool discovery", agency: { dims: {}, mult: ["Memory", "Tool discovery"] },
+      expect: { recordLevel: "Core plus features", sheets: ["Memory Controls", "Tool Authority Registry"] }, ref: [R.asbom] },
+    { id: "I4", g: "I", kind: "engine", t: "Consequential agent (T3)", agency: { dims: { consequence: 3 } },
+      expect: { agencyTier: "T3", recordLevel: "Full" }, ref: [R.asbom], why: "T3 and above needs the full ASBOM." },
+    { id: "I5", g: "I", kind: "engine", t: "Agent with financial authority", agency: { dims: {}, mult: ["Financial authority"] },
+      expect: { recordLevel: "Full" }, ref: [R.asbom] },
+    { id: "I6", g: "I", kind: "engine", t: "Agency tier not yet assessed", agency: { dims: {}, unassessed: true },
+      expect: { recordLevel: "Full" }, ref: [R.asbom, "AIG-AGT-04 fail-safe rule"], why: "Until the tier is known, the higher level applies." },
+    { id: "I7", g: "I", kind: "workbook", t: "ASBOM workbook: T0 agent, core record complete, going live", sheet: "Agent Record", message: "OK", ref: ["AIG-AGT-04 v0.6 Record QA"] },
+    { id: "I8", g: "I", kind: "workbook", t: "ASBOM workbook: core field missing at go-live", sheet: "Agent Record", message: "Core record incomplete: name, purpose, owner, platform, agency tier and profile ref, permission scope, credentials, how to stop it, how to undo it, UC-IDs and review date are needed before go-live", ref: ["AIG-AGT-04 v0.6 Record QA"] },
+    { id: "I9", g: "I", kind: "workbook", t: "ASBOM workbook: a core field says 'Not disclosed by supplier'", sheet: "Agent Record", message: "A core field says Not disclosed by supplier: the Council must answer the core fields itself", ref: ["AIG-AGT-04 v0.6 Record QA", R.asbom] },
+    { id: "I10", g: "I", kind: "workbook", t: "ASBOM workbook: T3 agent without the full sheets", sheet: "Agent Record", message: "Full ASBOM (T3 and above, financial authority or tier not assessed): Capability Vector, Components and all ten Runtime Controls rows with Required State set are needed", ref: ["AIG-AGT-04 v0.6 Record QA"] },
+    { id: "I11", g: "I", kind: "procedure", t: "Bought-in agent whose supplier will not disclose its components",
+      steps: ["Record 'Not disclosed by supplier' in the supplier-side fields of AIG-AGT-04.", "Record the gap as a risk in AIG-ASS-02 and AIG-ASS-08.", "Answer every core field from the Council's own set-up."],
+      expected: "Record complete to its level; the disclosure gap is a recorded risk, not a blocker.", ref: [R.asbom, "AIG-ASS-08 v1.8"] },
     { id: "H6", g: "H", kind: "procedure", t: "Post-Deployment 'Start from a triage record'", steps: ["Load the canonical triage JSON into the Post-Deployment tool."], expected: "Fills system, AIR-ID, UC-ID and scope; never ticks 'verified' or fills tiers; never overwrites typed values.", ref: ["AIGovernancePostDeployment tests"], status: "verified", evidence: "Post-Deployment test suite (32 tests)" },
   ];
 

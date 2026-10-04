@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reproduce the Gate Log (AIG-DEC-04) workbook checks for scenarios G1 to G9 and H2 (and F4b to F4d in the Register, if it is in the same folder).
+"""Reproduce the Gate Log (AIG-DEC-04) workbook checks for scenarios G1 to G9 and H2 (F4b to F4d in the Register and I7 to I10 in the Agent Record, if they are in the same folder).
 
 Usage: python3 scripts/check-gate-log.py <AIG-DEC-04_Gate_Log_Proposed.xlsx> [path/to/recalc.py]
 
@@ -90,6 +90,35 @@ if os.path.exists(reg_src):
     for r, (sid, _) in ev.items():
         out.append({"scenario": sid, "sheet": "Evidence index", "row": r, "message": rv[f"L{r}"].value})
     registers.append(os.path.basename(reg_src) + " " + openpyxl.load_workbook(reg_src)["Document Control"]["B7"].value)
+
+# Agent Record / ASBOM (AIG-AGT-04) Record QA, if it sits next to the Gate Log: the
+# proportionate record levels (Playbook F.3; scenarios I7 to I10).
+agt_src = os.path.join(os.path.dirname(os.path.abspath(src)), "AIG-AGT-04_Agent_Record_ASBOM_Proposed.xlsx")
+if os.path.exists(agt_src):
+    atmp = os.path.join(os.path.dirname(tmp), "asbom-test.xlsx")
+    shutil.copy(agt_src, atmp)
+    awb = openpyxl.load_workbook(atmp)
+    AR = awb["Agent Record"]
+    core = dict(A="AIR-T001", B="Test agent", C="Draft replies for officer review", H="Service Owner", I="Copilot Studio",
+                M="T0 informational", S="Reads one mailbox; drafts replies", T="Service account SA-T1", U="Disable the flow",
+                X="Delete drafts", AA="2027-10-01", AS="Pre-action approval", BB="1.0", BJ="A1 assisted", BK="DEC-T1",
+                BA="DEC-UC-T1", AB="Approved", AC="Active", O="No", Q="No", P="None", R="No",
+                AZ="UC-T1", BE="Agency Profile row")
+    ag = {
+        6: ("I7", {}),
+        7: ("I8", dict(U="")),
+        8: ("I9", dict(T="Not disclosed by supplier")),
+        9: ("I10", dict(M="T3 consequential agent")),
+    }
+    for i, (r, (_, vals)) in enumerate(ag.items()):
+        put(AR, r, **{**core, **vals, "AY": f"AG-T{r}"})
+        put(awb["Agency Profile"], 5 + i, A="AIR-T001", B=f"AG-T{r}")
+    awb.save(atmp)
+    subprocess.run([sys.executable, os.path.basename(recalc), atmp], cwd=os.path.dirname(recalc), check=True, capture_output=True)
+    av = openpyxl.load_workbook(atmp, data_only=True)["Agent Record"]
+    for r, (sid, _) in ag.items():
+        out.append({"scenario": sid, "sheet": "Agent Record", "row": r, "message": av[f"BI{r}"].value})
+    registers.append(os.path.basename(agt_src) + " " + openpyxl.load_workbook(agt_src)["Summary"]["B8"].value)
 version = openpyxl.load_workbook(src)["Document Control"]["B7"].value
 res = {"workbook": os.path.basename(src), "version": version, "also": registers, "date": datetime.date.today().isoformat(), "results": out}
 here = os.path.join(os.path.dirname(__file__), "..", "results")

@@ -1,6 +1,6 @@
 # AI Governance QA Scenarios
 
-A scenario test suite for the proposed AI governance suite (release v3.9.8, 3 October 2026). It checks that the triage engine, the Gate Log and Register workbooks and the human controls behave the way the suite's own rules say they should, across every combination of system, use, money, risk tier, agency, Fast Track and screening we could think of.
+A scenario test suite for the proposed AI governance suite (release v3.9.9, 4 October 2026). It checks that the triage engine, the Gate Log, Register and Agent Record workbooks and the human controls behave the way the suite's own rules say they should, across every combination of system, use, money, risk tier, agency, Fast Track and screening we could think of.
 
 **Live page:** https://kimabercromby.github.io/AIGovernanceQAScenarios/
 
@@ -13,7 +13,7 @@ Proposed design draft, not approved Council policy. All records are fictional.
    - *Engine* scenarios run against the real triage engine (`engine/triage-logic.js`, the same file the triage tool uses), in the browser and in Node.
    - *Workbook* scenarios check the Gate Log's row-check formulas. `scripts/check-gate-log.py` writes sample rows into a copy of the workbook, recalculates it with LibreOffice and reads each check back; the results are stored in `results/`.
    - *Human control* scenarios cover rules a person applies (the governance steward, the DPO, the decision-maker). They list the steps and, where it exists, the evidence.
-3. **Tests that bite.** `scripts/mutation-check.js` puts sixteen realistic bugs into an in-memory copy of the engine, including the Light-touch defect found in the Copilot simulation, and confirms at least one scenario fails for each.
+3. **Tests that bite.** `scripts/mutation-check.js` puts eighteen realistic bugs into an in-memory copy of the engine, including the Light-touch defect found in the Copilot simulation, and confirms at least one scenario fails for each.
 4. **Decisions surfaced.** Where the rules give an answer that may not be wanted, or leave a gap, the scenario carries a "Decision needed" note instead of being passed quietly.
 
 ## Coverage

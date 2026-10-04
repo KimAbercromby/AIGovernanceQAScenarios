@@ -2,7 +2,7 @@
   "name": "ai-governance-qa-scenarios",
   "version": "1.0.0",
   "private": true,
-  "description": "Scenario test suite for the proposed AI governance suite (v3.9.8).",
+  "description": "Scenario test suite for the proposed AI governance suite (v3.9.9).",
   "scripts": {
     "test": "node --test test/*.test.js",
     "mutation": "node scripts/mutation-check.js",
