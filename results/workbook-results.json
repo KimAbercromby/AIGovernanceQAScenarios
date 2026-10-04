@@ -191,7 +191,7 @@
    "scenario": "I8",
    "sheet": "Agent Record",
    "row": 7,
-   "message": "Core record incomplete: purpose, owner, platform, agency tier, permission scope, credentials, how to stop it, how to undo it and review date are needed before go-live"
+   "message": "Core record incomplete: name, purpose, owner, platform, agency tier and profile ref, permission scope, credentials, how to stop it, how to undo it, UC-IDs and review date are needed before go-live"
   },
   {
    "scenario": "I9",
@@ -203,7 +203,7 @@
    "scenario": "I10",
    "sheet": "Agent Record",
    "row": 9,
-   "message": "Full ASBOM (T3 and above): Capability Vector, Components and all ten Runtime Controls rows (Required or Not applicable) are needed"
+   "message": "Full ASBOM (T3 and above, financial authority or tier not assessed): Capability Vector, Components and all ten Runtime Controls rows with Required State set are needed"
   }
  ]
 }

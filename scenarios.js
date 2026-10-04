@@ -42,7 +42,7 @@
   };
 
   const R = {
-    g13: "AIG-DEC-01 v1.12 Gate 1 and 3 rule",
+    g13: "AIG-DEC-01 Gate 1 and 3 rule (from v1.12)",
     g2: "AIG-DEC-01 v1.13 Gate 2 (mandatory for High, Critical and action-capable uses)",
     g4: "AIG-DEC-01 v1.13 Gate 4 rule",
     g5: "AIG-DEC-01 v1.13 Gate 5 (from Medium)",
@@ -277,9 +277,9 @@
     { id: "I6", g: "I", kind: "engine", t: "Agency tier not yet assessed", agency: { dims: {}, unassessed: true },
       expect: { recordLevel: "Full" }, ref: [R.asbom, "AIG-AGT-04 fail-safe rule"], why: "Until the tier is known, the higher level applies." },
     { id: "I7", g: "I", kind: "workbook", t: "ASBOM workbook: T0 agent, core record complete, going live", sheet: "Agent Record", message: "OK", ref: ["AIG-AGT-04 v0.6 Record QA"] },
-    { id: "I8", g: "I", kind: "workbook", t: "ASBOM workbook: core field missing at go-live", sheet: "Agent Record", message: "Core record incomplete: purpose, owner, platform, agency tier, permission scope, credentials, how to stop it, how to undo it and review date are needed before go-live", ref: ["AIG-AGT-04 v0.6 Record QA"] },
+    { id: "I8", g: "I", kind: "workbook", t: "ASBOM workbook: core field missing at go-live", sheet: "Agent Record", message: "Core record incomplete: name, purpose, owner, platform, agency tier and profile ref, permission scope, credentials, how to stop it, how to undo it, UC-IDs and review date are needed before go-live", ref: ["AIG-AGT-04 v0.6 Record QA"] },
     { id: "I9", g: "I", kind: "workbook", t: "ASBOM workbook: a core field says 'Not disclosed by supplier'", sheet: "Agent Record", message: "A core field says Not disclosed by supplier: the Council must answer the core fields itself", ref: ["AIG-AGT-04 v0.6 Record QA", R.asbom] },
-    { id: "I10", g: "I", kind: "workbook", t: "ASBOM workbook: T3 agent without the full sheets", sheet: "Agent Record", message: "Full ASBOM (T3 and above): Capability Vector, Components and all ten Runtime Controls rows (Required or Not applicable) are needed", ref: ["AIG-AGT-04 v0.6 Record QA"] },
+    { id: "I10", g: "I", kind: "workbook", t: "ASBOM workbook: T3 agent without the full sheets", sheet: "Agent Record", message: "Full ASBOM (T3 and above, financial authority or tier not assessed): Capability Vector, Components and all ten Runtime Controls rows with Required State set are needed", ref: ["AIG-AGT-04 v0.6 Record QA"] },
     { id: "I11", g: "I", kind: "procedure", t: "Bought-in agent whose supplier will not disclose its components",
       steps: ["Record 'Not disclosed by supplier' in the supplier-side fields of AIG-AGT-04.", "Record the gap as a risk in AIG-ASS-02 and AIG-ASS-08.", "Answer every core field from the Council's own set-up."],
       expected: "Record complete to its level; the disclosure gap is a recorded risk, not a blocker.", ref: [R.asbom, "AIG-ASS-08 v1.8"] },

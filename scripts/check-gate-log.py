@@ -102,15 +102,17 @@ if os.path.exists(agt_src):
     core = dict(A="AIR-T001", B="Test agent", C="Draft replies for officer review", H="Service Owner", I="Copilot Studio",
                 M="T0 informational", S="Reads one mailbox; drafts replies", T="Service account SA-T1", U="Disable the flow",
                 X="Delete drafts", AA="2027-10-01", AS="Pre-action approval", BB="1.0", BJ="A1 assisted", BK="DEC-T1",
-                BA="DEC-UC-T1", AB="Approved", AC="Active", O="No", Q="No", P="None", R="No")
+                BA="DEC-UC-T1", AB="Approved", AC="Active", O="No", Q="No", P="None", R="No",
+                AZ="UC-T1", BE="Agency Profile row")
     ag = {
         6: ("I7", {}),
         7: ("I8", dict(U="")),
         8: ("I9", dict(T="Not disclosed by supplier")),
         9: ("I10", dict(M="T3 consequential agent")),
     }
-    for r, (_, vals) in ag.items():
+    for i, (r, (_, vals)) in enumerate(ag.items()):
         put(AR, r, **{**core, **vals, "AY": f"AG-T{r}"})
+        put(awb["Agency Profile"], 5 + i, A="AIR-T001", B=f"AG-T{r}")
     awb.save(atmp)
     subprocess.run([sys.executable, os.path.basename(recalc), atmp], cwd=os.path.dirname(recalc), check=True, capture_output=True)
     av = openpyxl.load_workbook(atmp, data_only=True)["Agent Record"]
