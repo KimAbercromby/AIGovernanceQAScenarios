@@ -28,6 +28,8 @@ const MUTATIONS = [
   { id: "M13", name: "Lapsed system approval not checked", from: "if (existing && systemApprovalOf(profile) !== SYSTEM_APPROVAL.yes) common.push(", to: "if (false) common.push(" },
   { id: "M14", name: "Contradiction warning removed", from: "if (newInvestmentOf(profile) === NEW_INVESTMENT.no && procurementRouteOf(profile) === PROCUREMENT.new) {", to: "if (false) {" },
   { id: "M15", name: "Fast-Track versus risk-tier mismatch not flagged", from: 'if (fastTrackOf(profile) === FAST_TRACK.allNo && tier && tier !== "Low") {', to: "if (false) {" },
+  { id: "M16", name: "T3 agents get only the core Agent Record", from: 'if (tier === null || tier >= 3 || mult.includes("Financial authority")) {', to: 'if (tier === null || tier >= 4 || mult.includes("Financial authority")) {' },
+  { id: "M17", name: "Delegation no longer switches on the Authority Graph", from: 'Delegation: ["Authority & Delegations", "Multi-Agent Controls", "Agent Authority Graph (AIG-AGT-05)"],', to: "" },
   { id: "M12", name: "Screening not carried to Gate 6 when Gates 1 and 3 are N/A", from: "...(g13.na3 && !gate5Required ? CARRIED_FROM_GATES_1_3 : []),", to: "" },
 ];
 

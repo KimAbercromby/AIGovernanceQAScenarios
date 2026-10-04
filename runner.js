@@ -37,8 +37,27 @@
     return { profile, results, route };
   }
 
+  // Agent Record level (suite v3.9.9; Playbook F.3): agency scenarios run the agentic
+  // assessment only, with containment demonstrated so rule D1 does not apply.
+  function runAgency(L, s) {
+    const e = s.expect || {};
+    const checks = [];
+    const add = (label, expected, actual, pass) => checks.push({ label, expected: String(expected), actual: String(actual), pass: !!pass });
+    let a, rec;
+    try {
+      a = L.computeAgentic({ dimensions: s.agency.dims || {}, multipliers: s.agency.mult || [], killSwitch: true, rollback: true, boundariesTested: true });
+      rec = s.agency.unassessed ? L.agentRecordLevel(null) : a.recordLevel;
+    } catch (err) { return { pass: false, error: String(err && err.message || err), checks: [] }; }
+    if (e.agencyTier) add("Agency tier", e.agencyTier, a.tierLabel, a.tierLabel.startsWith(e.agencyTier));
+    if (e.recordLevel) add("Agent Record level", e.recordLevel, rec.level, rec.level === e.recordLevel);
+    (e.sheets || []).forEach((sh) => add("Sheet required", sh, rec.sheets.join(", ") || "none", rec.sheets.includes(sh)));
+    if (e.noSheets) add("Extra sheets", "none", rec.sheets.join(", ") || "none", rec.sheets.length === 0);
+    return { pass: checks.length > 0 && checks.every((c) => c.pass), checks, summary: { tier: a.tierLabel, route: rec.level, gates: "", priority: "" } };
+  }
+
   function run(L, QA, s) {
     if (s.kind !== "engine") return null;
+    if (s.agency) return runAgency(L, s);
     let ctx;
     try { ctx = build(L, QA, s); } catch (e) { return { pass: false, error: String(e && e.message || e), checks: [] }; }
     const { profile, results, route } = ctx;

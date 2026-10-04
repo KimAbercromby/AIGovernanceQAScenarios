@@ -25,7 +25,7 @@ test("every scenario has a rule reference and a unique id", () => {
 });
 
 test("the vendored engine is the suite release the scenarios were written for", () => {
-  assert.equal(L.SUITE.release, "v3.9.8");
+  assert.equal(L.SUITE.release, "v3.9.9");
 });
 
 // Workbook scenarios: the recorded LibreOffice run (scripts/check-gate-log.py) must give

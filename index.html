@@ -120,7 +120,7 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
   </section>
 
   <section class="panel" aria-labelledby="wb-h">
-    <h2 id="wb-h">Workbook runs (Gate Log and Register)</h2>
+    <h2 id="wb-h">Workbook runs (Gate Log, Register and Agent Record)</h2>
     <p class="note" id="wbMeta"></p>
   </section>
 
@@ -193,7 +193,8 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
       if (o.r.error) body += `<div class="err">Engine error: ${esc(o.r.error)}</div>`;
       body += `<div class="checks"><table><thead><tr><th>Check</th><th>Expected (from the rule)</th><th>Engine result</th><th></th></tr></thead><tbody>${o.r.checks.map((c) =>
         `<tr><td>${esc(c.label)}</td><td class="mono">${esc(pretty(c.label, c.expected))}</td><td class="mono">${esc(pretty(c.label, c.actual))}</td><td class="${c.pass ? "ok" : "bad"}">${c.pass ? "✓" : "✗"}</td></tr>`).join("")}</tbody></table></div>`;
-      body += `<details><summary>Inputs</summary><p class="note mono">${esc(JSON.stringify({ ...(s.p || {}), risk: s.risk || "LOW", ...(s.triggers ? { triggers: s.triggers } : {}), ...(s.investigation ? { investigation: s.investigation } : {}), ...(s.evidence ? { controlEvidence: s.evidence } : {}) }))}</p><p class="note">All other fields: the base case, a new use of Copilot (AIR-SIM1) under the existing licence.</p></details>`;
+      if (s.agency) body += `<details><summary>Inputs</summary><p class="note mono">${esc(JSON.stringify(s.agency))}</p><p class="note">Agency scores not listed are 0; containment (kill-switch) demonstrated.</p></details>`;
+      else body += `<details><summary>Inputs</summary><p class="note mono">${esc(JSON.stringify({ ...(s.p || {}), risk: s.risk || "LOW", ...(s.triggers ? { triggers: s.triggers } : {}), ...(s.investigation ? { investigation: s.investigation } : {}), ...(s.evidence ? { controlEvidence: s.evidence } : {}) }))}</p><p class="note">All other fields: the base case, a new use of Copilot (AIR-SIM1) under the existing licence.</p></details>`;
     } else if (s.kind === "workbook") {
       body += `<div class="checks"><table><thead><tr><th>Sheet</th><th>Expected row check</th><th>Workbook result</th><th></th></tr></thead><tbody>${(o.rows && o.rows.length ? o.rows : [{ sheet: s.sheet, message: "not run" }]).map((r) =>
         `<tr><td>${esc(r.sheet)}${r.row ? " row " + r.row : ""}</td><td class="mono">${esc(s.message)}</td><td class="mono">${esc(r.message)}</td><td class="${r.message === s.message ? "ok" : "bad"}">${r.message === s.message ? "✓" : "✗"}</td></tr>`).join("")}</tbody></table></div>`;
