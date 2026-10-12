@@ -15,7 +15,7 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
 
-  const SUITE = "v3.9.9 (4 October 2026)";
+  const SUITE = "v3.9.10 (12 October 2026)";
   const NO_INVEST = "No — no new funding, licences, charges, procurement, contract or licence change";
 
   // A new use of Microsoft 365 Copilot, already on the Register (fictional AIR-SIM1).
