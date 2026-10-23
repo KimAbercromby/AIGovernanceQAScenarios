@@ -2,10 +2,10 @@
  "workbook": "AIG-DEC-04_Gate_Log_Proposed.xlsx",
  "version": "1.3 draft",
  "also": [
-  "AIG-INV-04_AI_Register_Proposed.xlsx 1.1 draft",
-  "AIG-AGT-04_Agent_Record_ASBOM_Proposed.xlsx 0.6 working draft"
+  "AIG-INV-04_AI_Register_Proposed.xlsx 1.2 draft",
+  "AIG-AGT-04_Agent_Record_ASBOM_Proposed.xlsx 0.7 working draft"
  ],
- "date": "2026-10-04",
+ "date": "2026-10-23",
  "results": [
   {
    "scenario": "G7",

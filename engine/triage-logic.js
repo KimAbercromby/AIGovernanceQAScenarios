@@ -6,14 +6,14 @@
   "use strict";
 
   // Suite release this tool is aligned to, with the artefact versions it relies on
-  // (from the AIG-GOV-03 Artefact Index, suite release v3.9.10, 12 October 2026).
+  // (from the AIG-GOV-03 Artefact Index, suite release v3.9.11, 16 October 2026).
   const SUITE = {
-    release: "v3.9.10",
-    date: "12 October 2026",
+    release: "v3.9.11",
+    date: "16 October 2026",
     status: "Proposed — for Council confirmation; not approved or adopted",
     versions: {
-      "AIG-GOV-02 Playbook": "19.9.19 draft",
-      "AIG-GOV-03 Artefact Index": "1.35 draft",
+      "AIG-GOV-02 Playbook": "19.9.23 draft",
+      "AIG-GOV-03 Artefact Index": "1.37 draft",
       "AIG-INV-04 AI Register": "1.2 draft",
       "AIG-INV-05 Capabilities and System Map": "0.3 proposed design draft",
       "AIG-ASS-01 AGPI Triage Tool": "1.4 draft",
@@ -25,7 +25,7 @@
       "AIG-DEC-04 Gate Log": "1.3 draft",
       "AIG-AGT-02 Agentic Classification Reference": "1.7 draft",
       "AIG-AGT-03 Agentic Triage": "1.7 draft",
-      "AIG-AGT-04 Agent Record (ASBOM)": "0.6 working draft",
+      "AIG-AGT-04 Agent Record (ASBOM)": "0.7 working draft",
       "AIG-AGT-06 Agentic Action / Decision Record": "1.6 draft",
       "AIG-OPS-01 Deployment and Rollout Plan": "1.13 draft",
       "AIG-OPS-02 Monitoring and Review Log": "1.6 draft",
@@ -131,31 +131,31 @@
   const TRIGGERS = [
     {
       id: "specialData",
-      text: "Processing of special category personal data as defined by the UK GDPR",
+      text: "Processing of special category personal data (UK GDPR)",
     },
     {
       id: "vulnerable",
-      text: "AI used in relation to vulnerable residents, including children, adults with care and support needs, and individuals experiencing homelessness",
+      text: "Use in relation to vulnerable residents (children, adults with care/support needs, people experiencing homelessness)",
     },
     {
       id: "housingCare",
-      text: "AI that directly influences housing allocation, social care assessments or homelessness prevention decisions",
+      text: "Directly influences housing allocation, social care assessments or homelessness prevention decisions",
     },
     {
       id: "novel",
-      text: "Novel or first-of-type AI deployment for which the organisation has no prior operational experience",
+      text: "Novel or first-of-type AI deployment with no prior Council operational experience",
     },
     {
       id: "statutory",
-      text: "AI that produces or directly informs statutory decisions",
+      text: "Produces or directly informs statutory decisions",
     },
     {
       id: "materialChange",
-      text: "Significant supplier, model, data or scope change that materially alters an existing deployment",
+      text: "Significant AI supplier or model changes that materially alter the risk profile of an existing deployment",
     },
     {
       id: "agentic",
-      text: "AI systems capable of executing actions autonomously — including initiating transactions, modifying records, sending communications or invoking other systems — without human review of each individual action",
+      text: "Executes actions autonomously without human review of each individual action",
     },
   ];
 
@@ -284,7 +284,7 @@
     return out;
   }
 
-  // New investment question (AIG-INV-03 v1.9; AIG-DEC-01 v1.12 Gate 1 and 3 rule;
+  // New investment question (AIG-INV-03 v1.9; AIG-DEC-01 Gate 1 and 3 rule;
   // suite v3.9.8). Unsure counts as Yes. The "No" wording changed in v3.9.8 so a free new
   // system can answer it too; records saved with the v3.9.7 wording are still read.
   const NEW_INVESTMENT = {
@@ -324,7 +324,7 @@
     return Object.values(SYSTEM_APPROVAL).includes(value) ? value : SYSTEM_APPROVAL.unsure;
   }
   // Gate 1 decides whether the Council takes a use or system on at all; Gate 3 decides
-  // the investment and strategic case (AIG-DEC-01 v1.12 Gate 1 and 3 rule).
+  // the investment and strategic case (AIG-DEC-01 Gate 1 and 3 rule).
   // Gate 1 is N/A only for a new UC-ID, or a change to a use in governance (decision A5),
   // under an existing AIR-ID with no new investment,
   // at Low or Medium, that cannot act: a new system always goes to Gate 1, even if free.
@@ -361,7 +361,7 @@
     "Versioned AI assurance opinion, where one is given",
   ];
 
-  // Procurement question (AIG-DEC-01 v1.11 Gate 4 rule; Playbook §5.5.1; AIG-ASS-08 v1.6;
+  // Procurement question (AIG-DEC-01 Gate 4 rule; Playbook §5.5.1; AIG-ASS-08 v1.6;
   // Proposed — for Council confirmation). v3.9.2 (T-07, T-08).
   const PROCUREMENT = {
     unknown: "Not yet known",
@@ -728,7 +728,7 @@
     );
   }
 
-  // Agency-tier minimum pathway (AIG-DEC-01 v1.11 Agentic pathway; AIG-AGT-03 §6;
+  // Agency-tier minimum pathway (AIG-DEC-01 Agentic pathway; AIG-AGT-03 §6;
   // Playbook F.2). Applies to action-capable uses only. T0/T1 none, T2 Medium,
   // T3 High, T4 High (Critical where actions run without evidenced per-action human
   // review), T5 Critical. Proposed — for Council confirmation.
@@ -789,7 +789,7 @@
   }
 
   // Gate 4 and the full Supplier DDQ apply only where a procurement, new contract,
-  // licence change or contract variation is needed (AIG-DEC-01 v1.11), not from the
+  // licence change or contract variation is needed (AIG-DEC-01), not from the
   // Source answer alone (v3.9.2, T-07).
   function commercialRequired(profile) {
     return procurementRouteOf(profile) === PROCUREMENT.new;
@@ -1138,7 +1138,7 @@
     return match ? Number(match[1]) : null;
   }
 
-  // Prospective gate route (AIG-DEC-01 v1.11 Gate Map, gates 1 to 6), with the AI
+  // Prospective gate route (AIG-DEC-01 Gate Map, gates 1 to 6), with the AI
   // Assurance Board's assurance input shown as a separate, non-deciding step. The
   // governing tier sets which gates apply; the AGPI priority sets urgency only.
   // Gate 2 and Gate 6 are mandatory for every action-capable use (R1, R2); Gate 4
@@ -1275,7 +1275,7 @@
         naRationale: gate4.naRationale,
         forum: configured.commercial,
         decision:
-          "Funding, tendering and contract award: is the procurement route, supplier and contract acceptable under the relevant delegated authority? Gate 4 applies wherever a procurement, new contract, licence change or contract variation is needed (AIG-DEC-01 v1.11; Proposed \u2014 for Council confirmation).",
+          "Funding, tendering and contract award: is the procurement route, supplier and contract acceptable under the relevant delegated authority? Gate 4 applies wherever a procurement, new contract, licence change or contract variation is needed (AIG-DEC-01; Proposed \u2014 for Council confirmation).",
         evidence: gate4.applies === true || gate4.applies === null
           ? [
             "Supplier AI Due Diligence Questionnaire (AIG-ASS-08)",
@@ -1450,7 +1450,7 @@
       isReentry(profile)
         ? `${situationOf(profile)}: keep the Intake type already on the AIG-INV-04 row for this AIR-ID; the change re-enters intake and triage on the same AIR-ID.`
         : "Proposed from \u201cWhat's happening?\u201d and the operational state (found already in use or Live \u2192 Retrospective); use Aggregated only for an aggregated tool-level entry.");
-    add(reg, "Information asset reference", "", "Leave blank: the Information Governance team enters the reference of the matching Information Asset Register entry. The asset owner is held there, not repeated here (suite v3.9.10).");
+    add(reg, "Information asset reference", "", "Leave blank: the Information Governance team enters the reference of the matching Information Asset Register entry. The asset owner is held there, not repeated here.");
 
     const sum = "Assessment summary";
     add(sum, "AIR-ID", profile.registerId, identityReview);
@@ -1600,7 +1600,7 @@
   // AIG-DEC-01 decision gate (1 to 6). Columns A to L match the workbook exactly and
   // every controlled column holds a value from its dropdown: Gate / forum from the
   // Lists sheet, Requirement Required/Conditional (Not applicable for Gate 4 under the
-  // AIG-DEC-01 v1.11 rule, with a draft rationale in column J for the steward to confirm),
+  // AIG-DEC-01 rule, with a draft rationale in column J for the steward to confirm),
   // Plan state Planned, Decision scope UC-ID specific. A blank spacer column separates
   // the guidance columns, which are not part of the Gate plan. Plan ID and Target date
   // stay blank for the governance steward: the tool never issues IDs. The AI
@@ -1986,7 +1986,7 @@
         : "Sections 1\u20139 (supplier responses); Section 10 \u2014 Council Evaluation (internal)",
       fields: [
         { label: "Procurement route (intake answer)", value: gate4.route },
-        { label: "Gate 4 (AIG-DEC-01 v1.11 rule)", value: gate4.label },
+        { label: "Gate 4 (AIG-DEC-01 rule)", value: gate4.label },
       ],
       note: `${gate4.note} The commercial owner confirms the procurement position. (Proposed \u2014 for Council confirmation.)`,
     });
@@ -2642,6 +2642,212 @@
     };
   }
 
+  // ---------------------------------------------------------------------------
+  // Agents built on an approved platform (Playbook Appendix F.8, v19.9.23;
+  // consistent with the LGA playbook for agentic AI in local government, Oct 2026).
+  // Proposed — for Council confirmation. The platform is governed once under its
+  // own AIR-ID; each agent built on it is personal, an approved pattern, or
+  // individually governed. Any trigger answered Yes or Unsure means individual
+  // governance (“Unsure” is treated as yes).
+  const PLATFORM_AGENT_TRIGGERS = [
+    { id: "actsUnconfirmed", text: "Takes actions without the user confirming each one" },
+    { id: "changesRecords", text: "Changes records in line-of-business systems, sends communications outside the Council or spends money" },
+    { id: "residentFacing", text: "Is resident-facing" },
+    { id: "sensitiveData", text: "Uses special category data, or data its users could not otherwise access" },
+    { id: "influencesDecisions", text: "Influences decisions on eligibility, enforcement, prioritisation or safeguarding" },
+    { id: "orgWide", text: "Is shared across the whole organisation" },
+    { id: "callsAgent", text: "Calls another agent" },
+  ];
+  const PLATFORM_AGENT_AUDIENCE = {
+    self: "Just the person who built it",
+    team: "A team or service",
+    org: "The whole organisation",
+  };
+  const PLATFORM_AGENT_CLASSES = {
+    notPlatform: "Not an agent on an approved platform",
+    personal: "Personal agent (LGA Tier 1)",
+    patternCandidate: "Pattern not yet approved",
+    pattern: "Approved-pattern agent (LGA Tier 2)",
+    individual: "Individually governed agent (LGA Tier 3)",
+  };
+  const PLATFORM_AGENT_HEADERS = [
+    "Platform AIR-ID", "Platform", "Agent name", "What it does", "Built by",
+    "Named owner", "Shared with", "Pattern UC-ID", "Agent UC-ID", "Class",
+    "LGA tier", "Triggers met (Yes or Unsure)", "Can it act? (F.8)",
+    "Individual triage needed", "Next step", "Next inventory review", "Screened on",
+  ];
+
+  function platformAgentScreen(input) {
+    const a = input || {};
+    if (a.onPlatform !== "Yes") {
+      return {
+        cls: "notPlatform",
+        label: PLATFORM_AGENT_CLASSES.notPlatform,
+        lgaTier: "",
+        triageNeeded: true,
+        triggersMet: [],
+        canAct: "Answer the “can it act?” screen in Step 1 as normal",
+        nextSteps: ["Carry on with the full triage (Steps 1 to 4)."],
+        why: a.onPlatform === "Unsure"
+          ? "Unsure whether it sits on an approved platform, so it is triaged in its own right."
+          : "This is not an agent built on a platform already on the AI Register, so it is triaged in its own right.",
+      };
+    }
+    const answers = a.triggers || {};
+    const met = PLATFORM_AGENT_TRIGGERS.filter((t) => {
+      const v = t.id === "orgWide" && a.audience === PLATFORM_AGENT_AUDIENCE.org ? "Yes" : answers[t.id];
+      return v === "Yes" || v === "Unsure" || v === undefined || v === "";
+    }).map((t) => ({
+      id: t.id,
+      text: t.text,
+      answer: t.id === "orgWide" && a.audience === PLATFORM_AGENT_AUDIENCE.org ? "Yes" : (answers[t.id] || "Unsure"),
+    }));
+    if (met.length) {
+      return {
+        cls: "individual",
+        label: PLATFORM_AGENT_CLASSES.individual,
+        lgaTier: "Tier 3",
+        triageNeeded: true,
+        triggersMet: met,
+        canAct: "Answered for this agent on its own (Rules R1 and R2, F.2)",
+        nextSteps: [
+          "Give the agent its own UC-ID under the platform AIR-ID and complete Intake (AIG-INV-03).",
+          "Complete the full triage (Steps 1 to 4) and the Agentic Triage (AIG-AGT-03).",
+          "Create its own Agent Record (AIG-AGT-04) and take it through Gates 2 and 6.",
+          "Keep it switched off for live use until the gates are passed.",
+        ],
+        why: `${met.length} trigger${met.length > 1 ? "s" : ""} met (Yes or Unsure counts), so the agent is governed individually.`,
+      };
+    }
+    if (a.audience === PLATFORM_AGENT_AUDIENCE.self) {
+      return {
+        cls: "personal",
+        label: PLATFORM_AGENT_CLASSES.personal,
+        lgaTier: "Tier 1",
+        triageNeeded: false,
+        triggersMet: [],
+        canAct: "Assisted (T1) at platform level, covered by the platform’s Gate 2 and Gate 6 evidence",
+        nextSteps: [
+          "No individual intake or triage. Covered by the platform’s Register entry and the AI Acceptable Use Policy (§5.4).",
+          "The user checks every output.",
+          "It is picked up by the quarterly inventory review if it is later shared or gains connectors or actions.",
+        ],
+        why: "Built for the builder’s own use, within data they can already access, and no trigger is met.",
+      };
+    }
+    if (a.matchesPattern === "Yes" && String(a.patternUcId || "").trim()) {
+      return {
+        cls: "pattern",
+        label: PLATFORM_AGENT_CLASSES.pattern,
+        lgaTier: "Tier 2",
+        triageNeeded: false,
+        triggersMet: [],
+        canAct: "Assisted (T1) at platform level, covered by the platform’s Gate 2 and Gate 6 evidence",
+        nextSteps: [
+          `List this instance in the platform’s agent inventory under pattern ${String(a.patternUcId).trim()} with a named Service Owner.`,
+          "No separate triage for this instance: the pattern was triaged once under the platform AIR-ID.",
+          "Reviewed in the quarterly inventory review.",
+        ],
+        why: "Shared with a team, matches an approved pattern, and no trigger is met.",
+      };
+    }
+    return {
+      cls: "patternCandidate",
+      label: PLATFORM_AGENT_CLASSES.patternCandidate,
+      lgaTier: "Tier 2 (once the pattern is approved)",
+      triageNeeded: true,
+      triggersMet: [],
+      canAct: "Assisted (T1) at platform level, once the pattern is approved",
+      nextSteps: [
+        "Ask the AI Governance Lead to approve this as a pattern: one UC-ID under the platform AIR-ID.",
+        "Triage the pattern once in the full triage (Steps 1 to 4; Light-touch or Standard route, §3.8.1). Later agents that match it need no triage.",
+        "Until then, the agent is shared no wider than the person who built it.",
+      ],
+      why: a.matchesPattern === "Yes"
+        ? "It says it matches an approved pattern but no pattern UC-ID was given, so the pattern cannot be checked."
+        : "Shared with a team, no trigger is met, but no approved pattern covers it yet.",
+    };
+  }
+
+  function nextQuarterReview(date) {
+    const d = date instanceof Date ? date : new Date(date || Date.now());
+    const q = Math.floor(d.getMonth() / 3);
+    const next = new Date(Date.UTC(d.getFullYear() + (q === 3 ? 1 : 0), ((q + 1) % 4) * 3, 1));
+    return `By ${formatDate(next)} (quarterly inventory review)`;
+  }
+
+  function buildPlatformAgentRow(input, screen, screenedOn) {
+    const a = input || {};
+    const s = screen || platformAgentScreen(a);
+    const date = screenedOn || new Date();
+    return [
+      a.platformAirId || "",
+      a.platformName || "",
+      a.agentName || "",
+      a.agentPurpose || "",
+      a.builtBy || "",
+      a.owner || "",
+      a.audience || "",
+      s.cls === "pattern" || s.cls === "patternCandidate" ? (a.patternUcId || "Pending") : "",
+      s.cls === "individual" ? "Pending — issue at Intake" : "",
+      s.label,
+      s.lgaTier,
+      s.triggersMet.map((t) => `${t.text} (${t.answer})`).join("; "),
+      s.canAct,
+      s.triageNeeded ? "Yes" : "No",
+      s.nextSteps.join(" "),
+      s.cls === "notPlatform" ? "" : nextQuarterReview(date),
+      formatDate(date),
+    ];
+  }
+
+  function buildPlatformAgentCsv(input, screen, screenedOn) {
+    return toCsv(PLATFORM_AGENT_HEADERS, [buildPlatformAgentRow(input, screen, screenedOn)]);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Environmental flag (Playbook §4.3.15). Recorded against the AIR-ID; it does not
+  // change the risk tier. Four answers give Green, Amber or Red exactly as §4.3.15
+  // states. Separate download; never part of the AI Register export.
+  const ENVIRONMENTAL_HEADERS = ["AIR-ID", "System", "Flag", "Intensity", "Supplier Info Needed", "Notes"];
+  const ENVIRONMENTAL_ACTIONS = {
+    Green: "No further action needed; the flag is recorded (Playbook §4.3.15).",
+    Amber: "The Service Owner records in the Responsible AI Assessment (AIG-ASS-04) whether a smaller, existing or non-AI option would meet the need, and procurement asks the supplier about its environmental practices (§5.5.2) (Playbook §4.3.15).",
+    Red: "The Amber steps apply; the decision record (AIG-DEC-03) notes why a lower-impact option was not chosen; after go-live, monitoring includes usage and, where the supplier can provide it, energy data (Appendix E.1) (Playbook §4.3.15).",
+  };
+
+  function environmentalFlag(input) {
+    const a = input || {};
+    const fm = a.foundationModels, cloud = a.cloudBased, intensity = a.intensity, supplier = a.supplierPractices;
+    if (!fm || !cloud || !intensity || !supplier) {
+      return { complete: false, flag: "", reasons: [], supplierInfoNeeded: "", action: "Answer all four questions to see the environmental flag." };
+    }
+    const notDisclosed = supplier === "no" || supplier === "unknown";
+    const reasons = [];
+    if (fm === "yes") reasons.push("uses a foundation model");
+    if (intensity === "High" || intensity === "Very High") reasons.push(`${intensity.toLowerCase()} computational intensity`);
+    if (notDisclosed) reasons.push(supplier === "no" ? "supplier environmental practices not disclosed" : "supplier environmental practices unknown");
+    const flag = fm === "yes" && intensity === "Very High" && notDisclosed ? "Red" : reasons.length ? "Amber" : "Green";
+    if (flag === "Green") reasons.push("no foundation model, low or medium intensity, and supplier practices disclosed");
+    return { complete: true, flag, reasons, supplierInfoNeeded: notDisclosed ? "Yes" : "No", action: ENVIRONMENTAL_ACTIONS[flag] };
+  }
+
+  function buildEnvironmentalCsv(profile, input) {
+    const r = environmentalFlag(input);
+    const a = input || {};
+    const yn = (v) => (v === "yes" ? "Yes" : v === "no" ? "No" : v === "unknown" ? "Unknown" : "");
+    const notes = [
+      `Foundation model: ${yn(a.foundationModels)}`,
+      `Cloud infrastructure: ${yn(a.cloudBased)}`,
+      `Supplier practices disclosed: ${yn(a.supplierPractices)}`,
+      `Why: ${r.reasons.join("; ")}`,
+      `Next step: ${r.action}`,
+    ].join(". ");
+    return toCsv(ENVIRONMENTAL_HEADERS, [[
+      (profile && profile.registerId) || "", (profile && profile.systemName) || "", r.flag, a.intensity || "", r.supplierInfoNeeded, notes,
+    ]]);
+  }
+
   return {
     SUITE,
     DEC04_GATES,
@@ -2749,5 +2955,16 @@
     retirementNextGate,
     buildRetirementGateLogRow,
     buildRetirementDecisionRecord,
+    PLATFORM_AGENT_TRIGGERS,
+    PLATFORM_AGENT_AUDIENCE,
+    PLATFORM_AGENT_CLASSES,
+    PLATFORM_AGENT_HEADERS,
+    platformAgentScreen,
+    buildPlatformAgentRow,
+    buildPlatformAgentCsv,
+    ENVIRONMENTAL_HEADERS,
+    ENVIRONMENTAL_ACTIONS,
+    environmentalFlag,
+    buildEnvironmentalCsv,
   };
 });

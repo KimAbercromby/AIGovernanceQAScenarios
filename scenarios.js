@@ -15,7 +15,7 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
 
-  const SUITE = "v3.9.10 (12 October 2026)";
+  const SUITE = "v3.9.11 (16 October 2026)";
   const NO_INVEST = "No — no new funding, licences, charges, procurement, contract or licence change";
 
   // A new use of Microsoft 365 Copilot, already on the Register (fictional AIR-SIM1).
@@ -53,7 +53,7 @@
     agentic: "Playbook §4.4.6 agentic trigger; AIG-DEC-01 rules R1 to R3",
     screen: "Playbook §4.6 screening by reference; AIG-INV-02 Part C",
     gl: "AIG-DEC-04 v1.3 row checks",
-    asbom: "Playbook F.3 (v19.9.18); AIG-AGT-04 v0.6 column BL",
+    asbom: "Playbook F.3 (v19.9.23); AIG-AGT-04 v0.7 column BL",
   };
 
   const GROUPS = {

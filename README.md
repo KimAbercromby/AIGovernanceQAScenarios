@@ -1,6 +1,6 @@
 # AI Governance QA Scenarios
 
-A scenario test suite for the proposed AI governance suite (release v3.9.10, 12 October 2026). It checks that the triage engine, the Gate Log, Register and Agent Record workbooks and the human controls behave the way the suite's own rules say they should, across every combination of system, use, money, risk tier, agency, Fast Track and screening we could think of.
+A scenario test suite for the proposed AI governance suite (release v3.9.11, 16 October 2026). It checks that the triage engine, the Gate Log, Register and Agent Record workbooks and the human controls behave the way the suite's own rules say they should, across every combination of system, use, money, risk tier, agency, Fast Track and screening we could think of.
 
 **Live page:** https://kimabercromby.github.io/AIGovernanceQAScenarios/
 
